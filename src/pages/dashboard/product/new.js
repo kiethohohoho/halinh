@@ -38,12 +38,13 @@ export default function ProductCreatePage() {
       <Box>
         <Tooltip title="Generate voucher">
           <IconButton
-            color={color}
+            color="warning"
             onClick={handleGenerateVoucher}
           >
             <Iconify width={30} icon="mdi:auto-mode" />
           </IconButton>
         </Tooltip>
+        Generate voucher
         {
           voucher &&
           <Box sx={{ mt: 3 }}>

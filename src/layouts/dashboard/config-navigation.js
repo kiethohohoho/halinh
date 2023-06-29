@@ -87,7 +87,7 @@ export function useNavData() {
 
           // PRODUCT
           {
-            title: t('product'),
+            title: t('voucher'),
             path: paths.dashboard.product.root,
             icon: ICONS.product,
             children: [
