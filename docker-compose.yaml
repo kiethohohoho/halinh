@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  ms-linh-ha:
+    build: .
+    image: ms-linh-ha
+    container_name: ms-linh-ha
+    restart: always
+    ports:
+      - '3032:80'
+
