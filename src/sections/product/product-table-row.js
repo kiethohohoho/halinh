@@ -15,7 +15,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
-import Label from 'src/components/label';
+import { vi } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ export default function ProductTableRow({
     value,
     createDate,
     expired,
-    status,
+    // status,
   } = row;
 
   const confirm = useBoolean();
@@ -49,7 +49,9 @@ export default function ProductTableRow({
 
         <TableCell>
           <ListItemText
-            primary={format(new Date(createDate), 'dd MMM yyyy')}
+            primary={format(new Date(createDate), 'dd MMM yyyy', {
+              locale: vi,
+            })}
             secondary={format(new Date(createDate), 'p')}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
@@ -60,13 +62,26 @@ export default function ProductTableRow({
           />
         </TableCell>
 
-        <TableCell>{expired}</TableCell>
-
         <TableCell>
+          <ListItemText
+            primary={format(new Date(expired), 'dd MMM yyyy', {
+              locale: vi,
+            })}
+            secondary={format(new Date(expired), 'p')}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              mt: 0.5,
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </TableCell>
+
+        {/* <TableCell>
           <Label variant="soft" color={(status === 'có sẵn' && 'info') || 'default'}>
             {status}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="right">
           <IconButton color={popover.open ? 'primary' : 'default'} onClick={popover.onOpen}>

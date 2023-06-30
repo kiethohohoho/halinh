@@ -1,14 +1,13 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import MainLayout from 'src/layouts/main';
 // config
 // import { PATH_AFTER_LOGIN } from 'src/config-global';
 //
-import { mainRoutes, HomePage } from './main';
 import { authRoutes } from './auth';
 import { authDemoRoutes } from './auth-demo';
-import { dashboardRoutes } from './dashboard';
 import { componentsRoutes } from './components';
+import { dashboardRoutes } from './dashboard';
+import { mainRoutes } from './main';
 
 // ----------------------------------------------------------------------
 
@@ -23,14 +22,14 @@ export default function Router() {
     // ----------------------------------------------------------------------
 
     // SET INDEX PAGE WITH HOME PAGE
-    {
-      path: '/',
-      element: (
-        <MainLayout>
-          <HomePage />
-        </MainLayout>
-      ),
-    },
+    // {
+    //   path: '/',
+    //   element: (
+    //     <MainLayout>
+    //       <HomePage />
+    //     </MainLayout>
+    //   ),
+    // },
 
     // Auth routes
     ...authRoutes,
