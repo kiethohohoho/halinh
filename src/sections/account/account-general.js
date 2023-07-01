@@ -53,6 +53,11 @@ export default function AccountGeneral() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      if (data.belong === "Linh Hà 1")
+        data.belong = "LH1"
+      else
+        data.belong = "LH2";
+
       await axiosInstance.patch(endpoints.user.updateProfile, data);
       enqueueSnackbar('Cập nhật thành công!');
     } catch (error) {
