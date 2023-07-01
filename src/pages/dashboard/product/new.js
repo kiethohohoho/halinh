@@ -1,5 +1,5 @@
 import { Box, Container, IconButton, Tooltip } from '@mui/material';
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'src/components/snackbar';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -20,10 +20,10 @@ export default function ProductCreatePage() {
   const handleGenerateVoucher = () => {
     axiosInstance.post(endpoints.product.gen)
       .then(({ data }) => {
-        enqueueSnackbar('Generate success!');
+        enqueueSnackbar('Tạo voucher thành công!');
         setVoucher(data);
       }).catch((err) => {
-        enqueueSnackbar('Generate failed!', {
+        enqueueSnackbar('Tạo voucher thất bại!', {
           variant: 'error'
         });
       })
@@ -42,10 +42,10 @@ export default function ProductCreatePage() {
             links={[
               { name: 'Dashboard', href: paths.dashboard.root },
               {
-                name: 'Voucher',
+                name: 'Quản lý Voucher',
                 href: paths.dashboard.product.root,
               },
-              { name: 'Tạo' },
+              { name: 'Tạo voucher' },
             ]}
             sx={{ mb: { xs: 3, md: 5 } }}
           />

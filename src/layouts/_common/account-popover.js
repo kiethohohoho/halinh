@@ -23,16 +23,16 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
 const OPTIONS = [
+  // {
+  //   label: 'Home',
+  //   linkTo: '/',
+  // },
+  // {
+  //   label: 'Profile',
+  //   linkTo: paths.dashboard.user.profile,
+  // },
   {
-    label: 'Home',
-    linkTo: '/',
-  },
-  {
-    label: 'Profile',
-    linkTo: paths.dashboard.user.profile,
-  },
-  {
-    label: 'Settings',
+    label: 'Thông tin cá nhân',
     linkTo: paths.dashboard.user.account,
   },
 ];
@@ -54,10 +54,10 @@ export default function AccountPopover() {
     try {
       await logout();
       popover.onClose();
-      router.replace('/');
+      router.push(paths.auth.jwt.login);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Unable to logout!', { variant: 'error' });
+      enqueueSnackbar('Không thể đăng xuất!', { variant: 'error' });
     }
   };
 
@@ -101,9 +101,9 @@ export default function AccountPopover() {
             {authUser?.fullname}
           </Typography>
 
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+          {/* <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {authUser?.email || "<Không có email>"}
-          </Typography>
+          </Typography> */}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -122,7 +122,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
-          Logout
+          Đăng xuất
         </MenuItem>
       </CustomPopover>
     </>

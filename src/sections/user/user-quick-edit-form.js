@@ -1,57 +1,41 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import MenuItem from '@mui/material/MenuItem';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 // _mock
-import { USER_STATUS_OPTIONS } from 'src/_mock';
 // assets
-import { countries } from 'src/assets/data';
 // components
-import Iconify from 'src/components/iconify';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFSelect, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
-export default function UserQuickEditForm({ currentUser, open, onClose }) {
+export default function UserQuickEditForm({ currentUser, open, onClose, onQuickEditRow }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
+    name: Yup.string().required('Bắt buộc điền Họ tên'),
+    sdt: Yup.string().required('Bắt buộc điền Số điện thoại'),
+    role: Yup.string().required('Bắt buộc điền Chức danh'),
+    belong: Yup.string().required('Bắt buộc điền Chi nhánh'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      status: currentUser?.status,
-      company: currentUser?.company || '',
+      sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
+      belong: currentUser?.belong === "LH1" ? "Linh Hà 1" : "Linh Hà 2" || '',
     }),
     [currentUser]
   );
@@ -62,18 +46,21 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
   });
 
   const {
-    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      if (data.belong === "Linh Hà 1")
+        data.belong = "LH1"
+      else
+        data.belong = "LH2";
+
+      data.id = currentUser.id;
+      await axiosInstance.patch(endpoints.user.update, data);
+      enqueueSnackbar('Cập nhật thành công!');
+      onQuickEditRow();
     } catch (error) {
       console.error(error);
     }
@@ -90,14 +77,15 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>Quick Update</DialogTitle>
+        <DialogTitle>Cập nhật tài khoản</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
+          {/* <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
             Account is waiting for confirmation
-          </Alert>
+          </Alert> */}
 
           <Box
+            mt={1}
             rowGap={3}
             columnGap={2}
             display="grid"
@@ -106,64 +94,31 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
               sm: 'repeat(2, 1fr)',
             }}
           >
-            <RHFSelect name="status" label="Status">
-              {USER_STATUS_OPTIONS.map((status) => (
-                <MenuItem key={status.value} value={status.value}>
-                  {status.label}
-                </MenuItem>
-              ))}
-            </RHFSelect>
-
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
-
-            <RHFTextField name="name" label="Full Name" />
-            <RHFTextField name="email" label="Email Address" />
-            <RHFTextField name="phoneNumber" label="Phone Number" />
+            <RHFTextField name="name" label="Họ tên" />
+            <RHFTextField name="sdt" label="Số điện thoại" />
 
             <RHFAutocomplete
-              name="country"
-              label="Country"
-              options={countries.map((country) => country.label)}
+              name="role"
+              label="Chức danh"
+              options={["Admin", "Thu ngân", "Nhân viên"]}
               getOptionLabel={(option) => option}
-              renderOption={(props, option) => {
-                const { code, label, phone } = countries.filter(
-                  (country) => country.label === option
-                )[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    <Iconify
-                      key={label}
-                      icon={`circle-flags:${code.toLowerCase()}`}
-                      width={28}
-                      sx={{ mr: 1 }}
-                    />
-                    {label} ({code}) +{phone}
-                  </li>
-                );
-              }}
             />
 
-            <RHFTextField name="state" label="State/Region" />
-            <RHFTextField name="city" label="City" />
-            <RHFTextField name="address" label="Address" />
-            <RHFTextField name="zipCode" label="Zip/Code" />
-            <RHFTextField name="company" label="Company" />
-            <RHFTextField name="role" label="Role" />
+            <RHFAutocomplete
+              name="belong"
+              label="Chi nhánh"
+              options={["Linh Hà 1", "Linh Hà 2"]}
+            />
           </Box>
         </DialogContent>
 
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>
-            Cancel
+            Đóng
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Update
+            Cập nhật
           </LoadingButton>
         </DialogActions>
       </FormProvider>
@@ -174,5 +129,6 @@ export default function UserQuickEditForm({ currentUser, open, onClose }) {
 UserQuickEditForm.propTypes = {
   currentUser: PropTypes.object,
   onClose: PropTypes.func,
+  onQuickEditRow: PropTypes.func,
   open: PropTypes.bool,
 };

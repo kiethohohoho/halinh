@@ -159,7 +159,7 @@ export default function ProductListView() {
           links={[
             { name: 'Dashboard', href: paths.dashboard.root },
             {
-              name: 'Voucher',
+              name: 'Quản lý Voucher',
               href: paths.dashboard.product.root,
             },
             { name: 'Danh sách' },

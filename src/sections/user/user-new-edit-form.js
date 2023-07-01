@@ -1,75 +1,47 @@
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useCallback, useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
-import FormControlLabel from '@mui/material/FormControlLabel';
 // utils
-import { fData } from 'src/utils/format-number';
 // routes
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hook';
 // assets
-import { countries } from 'src/assets/data';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
-  RHFSwitch,
-  RHFTextField,
-  RHFUploadAvatar,
   RHFAutocomplete,
+  RHFTextField
 } from 'src/components/hook-form';
+import { useSnackbar } from 'src/components/snackbar';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function UserNewEditForm({ currentUser }) {
-  const router = useRouter();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role is required'),
-    zipCode: Yup.string().required('Zip code is required'),
-    avatarUrl: Yup.mixed().nullable().required('Avatar is required'),
-    // not required
-    status: Yup.string(),
-    isVerified: Yup.boolean(),
+    name: Yup.string().required('Bắt buộc điền Họ tên'),
+    sdt: Yup.string().required('Bắt buộc điền Số điện thoại'),
+    role: Yup.string().required('Bắt buộc điền Chức danh'),
+    belong: Yup.string().required('Bắt buộc điền Chi nhánh'),
+    account: Yup.string().required('Bắt buộc điền Tài khoản'),
+    password: Yup.string().required('Bắt buộc điền Mật khoản'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      city: currentUser?.city || '',
+      sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
-      email: currentUser?.email || '',
-      state: currentUser?.state || '',
-      status: currentUser?.status || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      zipCode: currentUser?.zipCode || '',
-      company: currentUser?.company || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      phoneNumber: currentUser?.phoneNumber || '',
-      isVerified: currentUser?.isVerified || true,
+      belong: currentUser?.belong || '',
+      account: currentUser?.account || '',
+      password: currentUser?.password || '',
     }),
     [currentUser]
   );
@@ -80,47 +52,49 @@ export default function UserNewEditForm({ currentUser }) {
   });
 
   const {
-    reset,
-    watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
-
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.user.list);
-      console.info('DATA', data);
+      if (data.belong === "Linh Hà 1")
+        data.belong = "LH1"
+      else
+        data.belong = "LH2";
+      
+      if (currentUser) {
+        delete data.account;
+        delete data.password;
+        await axiosInstance.patch(endpoints.user.update, data);
+      } else {
+        await axiosInstance.post(endpoints.user.create, data);
+      }
+      enqueueSnackbar(currentUser ? 'Cập nhật thành công!' : 'Tạo thành công!');
     } catch (error) {
       console.error(error);
     }
   });
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
+  // const handleDrop = useCallback(
+  //   (acceptedFiles) => {
+  //     const file = acceptedFiles[0];
 
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
+  //     const newFile = Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //     });
 
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
+  //     if (file) {
+  //       setValue('avatarUrl', newFile, { shouldValidate: true });
+  //     }
+  //   },
+  //   [setValue]
+  // );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={4}>
+        {/* <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             {currentUser && (
               <Label
@@ -214,9 +188,9 @@ export default function UserNewEditForm({ currentUser }) {
               </Stack>
             )}
           </Card>
-        </Grid>
+        </Grid> */}
 
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               rowGap={3}
@@ -227,11 +201,10 @@ export default function UserNewEditForm({ currentUser }) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+              <RHFTextField name="name" label="Họ tên" />
+              <RHFTextField name="sdt" label="Số điện thoại" />
 
-              <RHFAutocomplete
+              {/* <RHFAutocomplete
                 name="country"
                 label="Country"
                 options={countries.map((country) => country.label)}
@@ -258,19 +231,28 @@ export default function UserNewEditForm({ currentUser }) {
                     </li>
                   );
                 }}
+              /> */}
+
+              <RHFAutocomplete
+                name="role"
+                label="Chức danh"
+                options={["Admin", "Thu ngân", "Nhân viên"]}
+                getOptionLabel={(option) => option}
               />
 
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+              <RHFAutocomplete
+                name="belong"
+                label="Chi nhánh"
+                options={["Linh Hà 1", "Linh Hà 2"]}
+              />
+
+              <RHFTextField name="account" label="Tài khoản" />
+              <RHFTextField name="password" label="Mật khẩu" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentUser ? 'Create User' : 'Save Changes'}
+                {!currentUser ? 'Tạo' : 'Cập nhật'}
               </LoadingButton>
             </Stack>
           </Card>

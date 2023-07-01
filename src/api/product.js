@@ -9,7 +9,6 @@ export function useGetProducts() {
   const URL = endpoints.product.list;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  console.log({ data, isLoading, error, isValidating });
 
   const memoizedValue = useMemo(
     () => ({
@@ -31,7 +30,6 @@ export function useGenVouchers() {
   const URL = endpoints.product.gen;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
-  console.log({ data, isLoading, error, isValidating });
 
   const memoizedValue = useMemo(
     () => ({

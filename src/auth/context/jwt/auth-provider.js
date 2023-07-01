@@ -61,9 +61,13 @@ export function AuthProvider({ children }) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get(endpoints.auth.me);
+        const response = await axios.get(endpoints.user.me);
 
-        const { user } = response.data;
+        const { success, message, data: user } = response.data;
+
+        if (!success) {
+          throw new Error(message);
+        }
 
         dispatch({
           type: 'INITIAL',
