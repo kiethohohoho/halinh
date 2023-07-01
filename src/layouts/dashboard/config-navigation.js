@@ -50,11 +50,8 @@ export function useNavData() {
 
   const { user } = useAuthContext();
 
-  const { role } = user;
-  console.log(role);
-
   const data = useMemo(
-    () => role ? [
+    () => [
       // OVERVIEW
       // ----------------------------------------------------------------------
       // {
@@ -74,10 +71,10 @@ export function useNavData() {
       {
         // subheader: t('management'),
         items: [
-          (role === "Admin" && ({ title: "Danh sách tài khoản", path: paths.dashboard.user.list, })),
-          (role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
-          (role === "Admin" && ({ title: "Tạo tài khoản", path: paths.dashboard.user.new, })),
-          (role === "Nhân viên" && ({ title: "Tạo voucher", path: paths.dashboard.product.new, })),
+          (user?.role === "Admin" && ({ title: "Danh sách tài khoản", path: paths.dashboard.user.list, })),
+          (user?.role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
+          (user?.role === "Admin" && ({ title: "Tạo tài khoản", path: paths.dashboard.user.new, })),
+          (user?.role === "Nhân viên" && ({ title: "Tạo voucher", path: paths.dashboard.product.new, })),
 
           // USER
           // {
@@ -207,8 +204,8 @@ export function useNavData() {
           // },
         ].filter(a => !!a),
       },
-    ] : [],
-    [role]
+    ],
+    [user]
   );
 
   return data;
