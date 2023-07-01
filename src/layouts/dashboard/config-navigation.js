@@ -48,10 +48,13 @@ import { useAuthContext } from 'src/auth/hooks';
 export function useNavData() {
   // const { t } = useLocales();
 
-  const { user: { role } } = useAuthContext();
+  const { user } = useAuthContext();
+
+  const { role } = user;
+  console.log(role);
 
   const data = useMemo(
-    () => [
+    () => role ? [
       // OVERVIEW
       // ----------------------------------------------------------------------
       // {
@@ -204,7 +207,7 @@ export function useNavData() {
           // },
         ].filter(a => !!a),
       },
-    ],
+    ] : [],
     [role]
   );
 
