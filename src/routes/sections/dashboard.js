@@ -19,11 +19,6 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // // ORDER
 // const OrderListPage = lazy(() => import('src/pages/dashboard/order/list'));
 // const OrderDetailsPage = lazy(() => import('src/pages/dashboard/order/details'));
-// // INVOICE
-// const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
-// const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
-// const InvoiceCreatePage = lazy(() => import('src/pages/dashboard/invoice/new'));
-// const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 // // BLOG
 // const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
 // const BlogPostPage = lazy(() => import('src/pages/dashboard/post/details'));
@@ -62,6 +57,11 @@ const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
+// INVOICE
+const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
+const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
+const InvoiceCreatePage = lazy(() => import('src/pages/dashboard/invoice/new'));
+const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +86,8 @@ export const dashboardRoutes = (role) => {
     IndexPage = UserListPage
   else if (role === 'Nhân viên')
     IndexPage = ProductCreatePage
+  else if (role === 'Thu ngân')
+    IndexPage = InvoiceListPage
 
   let IndexProductPage = null;
   if (role === 'Admin')
@@ -134,22 +136,22 @@ export const dashboardRoutes = (role) => {
             { path: ':id/edit', element: <ProductEditPage /> },
           ].filter(a => !!a),
         },
+        (role === 'Thu ngân' && {
+          path: 'invoice',
+          children: [
+            { element: <InvoiceListPage />, index: true },
+            { path: 'list', element: <InvoiceListPage /> },
+            { path: ':id', element: <InvoiceDetailsPage /> },
+            { path: ':id/edit', element: <InvoiceEditPage /> },
+            { path: 'new', element: <InvoiceCreatePage /> },
+          ],
+        }),
         // {
         //   path: 'order',
         //   children: [
         //     { element: <OrderListPage />, index: true },
         //     { path: 'list', element: <OrderListPage /> },
         //     { path: ':id', element: <OrderDetailsPage /> },
-        //   ],
-        // },
-        // {
-        //   path: 'invoice',
-        //   children: [
-        //     { element: <InvoiceListPage />, index: true },
-        //     { path: 'list', element: <InvoiceListPage /> },
-        //     { path: ':id', element: <InvoiceDetailsPage /> },
-        //     { path: ':id/edit', element: <InvoiceEditPage /> },
-        //     { path: 'new', element: <InvoiceCreatePage /> },
         //   ],
         // },
         // {

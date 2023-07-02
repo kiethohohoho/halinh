@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 // routes
 import { useRouter, useSearchParams } from 'src/routes/hook';
 // config
-import { PATH_AFTER_LOGIN } from 'src/config-global';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // auth
@@ -69,8 +68,8 @@ export default function JwtLoginView() {
         else if (user.role === 'Nhân viên')
           url_after_login = paths.dashboard.product.new
         else
-          url_after_login = PATH_AFTER_LOGIN
-          
+          url_after_login = paths.dashboard.invoice.root
+
         router.push(returnTo || url_after_login)
       }
     } catch (error) {

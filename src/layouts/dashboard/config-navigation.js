@@ -75,6 +75,8 @@ export function useNavData() {
           (user?.role === "Admin" && ({ title: "Tạo tài khoản", path: paths.dashboard.user.new, })),
           (user?.role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
           (user?.role === "Nhân viên" && ({ title: "Tạo voucher", path: paths.dashboard.product.new, })),
+          (user?.role === "Thu ngân" && ({ title: "Danh sách hóa đơn", path: paths.dashboard.invoice.root, })),
+          (user?.role === "Thu ngân" && ({ title: "Tạo hóa đơn", path: paths.dashboard.invoice.new, })),
 
           // USER
           // {
