@@ -12,12 +12,13 @@ import NavList from './nav-list';
 
 // ----------------------------------------------------------------------
 
-function NavSectionVertical({ data, config, sx, ...other }) {
+function NavSectionVertical({ onCloseNav, data, config, sx, ...other }) {
   return (
     <Stack sx={sx} {...other}>
       {data.map((group, index) => (
         <Group
           key={group.subheader || index}
+          onCloseNav={onCloseNav}
           subheader={group.subheader}
           items={group.items}
           config={navVerticalConfig(config)}
@@ -28,6 +29,7 @@ function NavSectionVertical({ data, config, sx, ...other }) {
 }
 
 NavSectionVertical.propTypes = {
+  onCloseNav: PropTypes.func,
   config: PropTypes.object,
   data: PropTypes.array,
   sx: PropTypes.object,
@@ -37,7 +39,7 @@ export default memo(NavSectionVertical);
 
 // ----------------------------------------------------------------------
 
-function Group({ subheader, items, config }) {
+function Group({ subheader, items, config, onCloseNav }) {
   const [open, setOpen] = useState(true);
 
   const handleToggle = useCallback(() => {
@@ -46,6 +48,7 @@ function Group({ subheader, items, config }) {
 
   const renderContent = items.map((list) => (
     <NavList
+      onCloseNav={onCloseNav}
       key={list.title + list.path}
       data={list}
       depth={1}
@@ -72,6 +75,7 @@ function Group({ subheader, items, config }) {
 }
 
 Group.propTypes = {
+  onCloseNav: PropTypes.func,
   config: PropTypes.object,
   items: PropTypes.array,
   subheader: PropTypes.string,

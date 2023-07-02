@@ -30,14 +30,17 @@ export default function NavVertical({ openNav, onCloseNav, onOpenNav }) {
   const navData = useNavData();
 
   useEffect(() => {
-    if (!openNav) {
-      onOpenNav()
+    if (openNav) {
+      onCloseNav();
     }
-    // if (openNav) {
-    //   onCloseNav();
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  useEffect(() => {
+    onOpenNav();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   const renderContent = (
     <Scrollbar
@@ -54,6 +57,7 @@ export default function NavVertical({ openNav, onCloseNav, onOpenNav }) {
 
       <NavSectionVertical
         data={navData}
+        onCloseNav={onCloseNav}
         config={{
           currentRole: user?.role || 'admin',
         }}

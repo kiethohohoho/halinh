@@ -126,7 +126,7 @@ export const dashboardRoutes = (role) => {
             { path: 'account', element: <UserAccountPage /> },
           ],
         },
-        {
+        (role !== 'Thu ngân' && {
           path: 'product',
           children: [
             { element: <IndexProductPage />, index: true },
@@ -135,7 +135,7 @@ export const dashboardRoutes = (role) => {
             (role === 'Nhân viên' && { path: 'new', element: <ProductCreatePage /> }),
             { path: ':id/edit', element: <ProductEditPage /> },
           ].filter(a => !!a),
-        },
+        }),
         (role === 'Thu ngân' && {
           path: 'invoice',
           children: [

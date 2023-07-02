@@ -10,7 +10,7 @@ import NavItem from './nav-item';
 
 // ----------------------------------------------------------------------
 
-export default function NavList({ data, depth, hasChild, config }) {
+export default function NavList({ data, depth, hasChild, config, onCloseNav }) {
   const pathname = usePathname();
 
   const active = useActiveLink(data.path, hasChild);
@@ -28,6 +28,8 @@ export default function NavList({ data, depth, hasChild, config }) {
 
   const handleToggle = useCallback(() => {
     setOpen((prev) => !prev);
+    onCloseNav();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = useCallback(() => {
@@ -56,6 +58,7 @@ export default function NavList({ data, depth, hasChild, config }) {
 }
 
 NavList.propTypes = {
+  onCloseNav: PropTypes.func,
   config: PropTypes.object,
   data: PropTypes.object,
   depth: PropTypes.number,

@@ -1,12 +1,8 @@
-import sumBy from 'lodash/sumBy';
 import { useCallback, useState } from 'react';
 // @mui
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -37,7 +33,6 @@ import {
 } from 'src/components/table';
 //
 import { useGetInvoices } from 'src/api/invoice';
-import InvoiceAnalytic from '../invoice-analytic';
 import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 import InvoiceTableRow from '../invoice-table-row';
 import InvoiceTableToolbar from '../invoice-table-toolbar';
@@ -65,7 +60,7 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function InvoiceListView() {
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const settings = useSettingsContext();
 
@@ -110,15 +105,15 @@ export default function InvoiceListView() {
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
-  const getInvoiceLength = (status) => tableData.filter((item) => item.status === status).length;
+  // const getInvoiceLength = (status) => tableData.filter((item) => item.status === status).length;
 
-  const getTotalAmount = (status) =>
-    sumBy(
-      tableData.filter((item) => item.status === status),
-      'totalAmount'
-    );
+  // const getTotalAmount = (status) =>
+  //   sumBy(
+  //     tableData.filter((item) => item.status === status),
+  //     'totalAmount'
+  //   );
 
-  const getPercentByStatus = (status) => (getInvoiceLength(status) / tableData.length) * 100;
+  // const getPercentByStatus = (status) => (getInvoiceLength(status) / tableData.length) * 100;
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -203,7 +198,7 @@ export default function InvoiceListView() {
           }}
         />
 
-        <Card
+        {/* <Card
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -260,7 +255,7 @@ export default function InvoiceListView() {
               />
             </Stack>
           </Scrollbar>
-        </Card>
+        </Card> */}
 
         <Card>
           <InvoiceTableToolbar
