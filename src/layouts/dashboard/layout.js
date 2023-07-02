@@ -30,7 +30,7 @@ export default function DashboardLayout({ children }) {
 
   const renderHorizontal = <NavHorizontal />;
 
-  const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} />;
+  const renderNavVertical = <NavVertical openNav={nav.value} onCloseNav={nav.onFalse} onOpenNav={nav.onTrue} />;
 
   if (isHorizontal) {
     return (

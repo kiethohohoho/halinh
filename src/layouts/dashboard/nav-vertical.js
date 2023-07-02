@@ -20,7 +20,7 @@ import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
-export default function NavVertical({ openNav, onCloseNav }) {
+export default function NavVertical({ openNav, onCloseNav, onOpenNav }) {
   const { user } = useMockedUser();
 
   const pathname = usePathname();
@@ -30,9 +30,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
   const navData = useNavData();
 
   useEffect(() => {
-    if (openNav) {
-      onCloseNav();
+    if (!openNav) {
+      onOpenNav()
     }
+    // if (openNav) {
+    //   onCloseNav();
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
@@ -102,5 +105,6 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
 NavVertical.propTypes = {
   onCloseNav: PropTypes.func,
+  onOpenNav: PropTypes.func,
   openNav: PropTypes.bool,
 };
