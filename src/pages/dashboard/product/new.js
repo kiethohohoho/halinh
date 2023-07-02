@@ -1,10 +1,12 @@
-import { Box, Container, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Container, IconButton, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import { useSnackbar } from 'src/components/snackbar';
+import { useResponsive } from 'src/hooks/use-responsive';
+import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 // sections
@@ -13,6 +15,7 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 // ----------------------------------------------------------------------
 
 export default function ProductCreatePage() {
+  const lgUp = useResponsive('up', 'lg');
   const { enqueueSnackbar } = useSnackbar();
   const settings = useSettingsContext();
   const [voucher, setVoucher] = useState()
@@ -79,6 +82,10 @@ export default function ProductCreatePage() {
         }
         {/* <ProductCreateView /> */}
       </Box >
+
+      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
+        Trở về trang chủ
+      </Button>}
     </>
   )
 }

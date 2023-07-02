@@ -36,8 +36,10 @@ import {
   useTable,
 } from 'src/components/table';
 //
-import ProductTableRow from '../product-table-row';
 // import ProductTableToolbar from '../product-table-toolbar';
+import { useResponsive } from 'src/hooks/use-responsive';
+import { RouterLink } from 'src/routes/components';
+import ProductTableRow from '../product-table-row';
 import ProductTableFiltersResult from '../product-table-filters-result';
 
 // ----------------------------------------------------------------------
@@ -65,6 +67,7 @@ const defaultFilters = {
 
 export default function ProductListView() {
   const router = useRouter();
+  const lgUp = useResponsive('up', 'lg');
 
   const table = useTable();
 
@@ -284,6 +287,10 @@ export default function ProductListView() {
           />
         </Card>
       </Container>
+
+      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
+        Trở về trang chủ
+      </Button>}
 
       <ConfirmDialog
         open={confirm.value}

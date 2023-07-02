@@ -100,7 +100,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
             <RHFAutocomplete
               name="role"
               label="Chức danh"
-              options={["Admin", "Thu ngân", "Nhân viên"]}
+              options={["Admin", "Thu ngân", "Phục vụ"]}
               getOptionLabel={(option) => option}
             />
 

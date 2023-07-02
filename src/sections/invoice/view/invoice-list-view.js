@@ -33,6 +33,7 @@ import {
 } from 'src/components/table';
 //
 import { useGetInvoices } from 'src/api/invoice';
+import { useResponsive } from 'src/hooks/use-responsive';
 import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 import InvoiceTableRow from '../invoice-table-row';
 import InvoiceTableToolbar from '../invoice-table-toolbar';
@@ -61,6 +62,7 @@ const defaultFilters = {
 
 export default function InvoiceListView() {
   // const theme = useTheme();
+  const lgUp = useResponsive('up', 'lg');
 
   const settings = useSettingsContext();
 
@@ -331,6 +333,10 @@ export default function InvoiceListView() {
           />
         </Card>
       </Container>
+
+      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
+        Trở về trang chủ
+      </Button>}
 
       <ConfirmDialog
         open={confirm.value}

@@ -10,7 +10,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 // ----------------------------------------------------------------------
 
 // // OVERVIEW
-// const IndexPage = lazy(() => import('src/pages/dashboard/app'));
+const LHMobileIndexPage = lazy(() => import('src/pages/dashboard/app-mobile'));
 // const OverviewEcommercePage = lazy(() => import('src/pages/dashboard/ecommerce'));
 // const OverviewAnalyticsPage = lazy(() => import('src/pages/dashboard/analytics'));
 // const OverviewBankingPage = lazy(() => import('src/pages/dashboard/banking'));
@@ -65,7 +65,7 @@ const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 
 // ----------------------------------------------------------------------
 
-export const dashboardRoutes = (role) => {
+export const dashboardRoutes = (role, lgUp) => {
   if (!role) return [
     {
       path: '',
@@ -84,15 +84,19 @@ export const dashboardRoutes = (role) => {
   let IndexPage = null;
   if (role === 'Admin')
     IndexPage = UserListPage
-  else if (role === 'Nhân viên')
+  else if (role === 'Phục vụ')
     IndexPage = ProductCreatePage
   else if (role === 'Thu ngân')
     IndexPage = InvoiceListPage
 
+  if (!lgUp) {
+    IndexPage = LHMobileIndexPage;
+  }
+
   let IndexProductPage = null;
   if (role === 'Admin')
     IndexProductPage = ProductListPage
-  else if (role === 'Nhân viên')
+  else if (role === 'Phục vụ')
     IndexProductPage = ProductCreatePage
 
   return [
@@ -132,7 +136,7 @@ export const dashboardRoutes = (role) => {
             { element: <IndexProductPage />, index: true },
             (role === 'Admin' && { path: 'list', element: <ProductListPage /> }),
             { path: ':id', element: <ProductDetailsPage /> },
-            (role === 'Nhân viên' && { path: 'new', element: <ProductCreatePage /> }),
+            (role === 'Phục vụ' && { path: 'new', element: <ProductCreatePage /> }),
             { path: ':id/edit', element: <ProductEditPage /> },
           ].filter(a => !!a),
         }),

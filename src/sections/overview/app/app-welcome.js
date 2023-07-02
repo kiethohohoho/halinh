@@ -45,7 +45,7 @@ export default function AppWelcome({ title, description, action, img, ...other }
         </Typography>
 
         <Typography
-          variant="body2"
+          variant="body1"
           sx={{
             opacity: 0.8,
             maxWidth: 360,

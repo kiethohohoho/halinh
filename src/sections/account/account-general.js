@@ -86,7 +86,7 @@ export default function AccountGeneral() {
               <RHFAutocomplete
                 name="role"
                 label="Chức danh"
-                options={["Admin", "Thu ngân", "Nhân viên"]}
+                options={["Admin", "Thu ngân", "Phục vụ"]}
                 getOptionLabel={(option) => option}
               />
 

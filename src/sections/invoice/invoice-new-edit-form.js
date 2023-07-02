@@ -1,15 +1,16 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 // routes
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
+import { paths } from 'src/routes/paths';
 // _mock
 import { _addressBooks } from 'src/_mock';
 // hooks
@@ -17,16 +18,20 @@ import { useBoolean } from 'src/hooks/use-boolean';
 // components
 import FormProvider from 'src/components/hook-form';
 //
-import InvoiceNewEditDetails from './invoice-new-edit-details';
+import { useResponsive } from 'src/hooks/use-responsive';
+import { RouterLink } from 'src/routes/components';
 import InvoiceNewEditAddress from './invoice-new-edit-address';
+import InvoiceNewEditDetails from './invoice-new-edit-details';
 import InvoiceNewEditStatusDate from './invoice-new-edit-status-date';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditForm({ currentInvoice }) {
+  const lgUp = useResponsive('up', 'lg');
+
   const router = useRouter();
 
-  const loadingSave = useBoolean();
+  // const loadingSave = useBoolean();
 
   const loadingSend = useBoolean();
 
@@ -81,20 +86,20 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
     formState: { isSubmitting },
   } = methods;
 
-  const handleSaveAsDraft = handleSubmit(async (data) => {
-    loadingSave.onTrue();
+  // const handleSaveAsDraft = handleSubmit(async (data) => {
+  //   loadingSave.onTrue();
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      loadingSave.onFalse();
-      router.push(paths.dashboard.invoice.root);
-      console.info('DATA', JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error(error);
-      loadingSave.onFalse();
-    }
-  });
+  //   try {
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
+  //     reset();
+  //     loadingSave.onFalse();
+  //     router.push(paths.dashboard.invoice.root);
+  //     console.info('DATA', JSON.stringify(data, null, 2));
+  //   } catch (error) {
+  //     console.error(error);
+  //     loadingSave.onFalse();
+  //   }
+  // });
 
   const handleCreateAndSend = handleSubmit(async (data) => {
     loadingSend.onTrue();
@@ -122,7 +127,7 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
       </Card>
 
       <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        <LoadingButton
+        {/* <LoadingButton
           color="inherit"
           size="large"
           variant="outlined"
@@ -130,15 +135,25 @@ export default function InvoiceNewEditForm({ currentInvoice }) {
           onClick={handleSaveAsDraft}
         >
           Save as Draft
-        </LoadingButton>
+        </LoadingButton> */}
+
+        {!lgUp && <Button
+          size="large"
+          component={RouterLink}
+          href="/"
+          variant="contained"
+          sx={{ mt: "auto" }}>
+          Trở về trang chủ
+        </Button>}
 
         <LoadingButton
           size="large"
           variant="contained"
           loading={loadingSend.value && isSubmitting}
           onClick={handleCreateAndSend}
+          sx={{ backgroundColor: 'rgb(0, 167, 111)' }}
         >
-          {currentInvoice ? 'Update' : 'Create'} & Send
+          {currentInvoice ? 'Cập nhật' : 'Tạo'}
         </LoadingButton>
       </Stack>
     </FormProvider>

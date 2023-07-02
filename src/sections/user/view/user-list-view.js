@@ -31,8 +31,9 @@ import {
 } from 'src/components/table';
 //
 import { useGetUsers } from 'src/api/user';
-import axiosInstance, { endpoints } from 'src/utils/axios';
 import { useSnackbar } from 'src/components/snackbar';
+import { useResponsive } from 'src/hooks/use-responsive';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 
@@ -56,6 +57,8 @@ const defaultFilters = {
 // ----------------------------------------------------------------------
 
 export default function UserListView() {
+  const lgUp = useResponsive('up', 'lg');
+
   const table = useTable();
 
   const { users, usersMutate } = useGetUsers({});
@@ -164,7 +167,7 @@ export default function UserListView() {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={["Admin", "Thu ngân", "Nhân viên"]}
+            roleOptions={["Admin", "Thu ngân", "Phục vụ"]}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -220,6 +223,10 @@ export default function UserListView() {
           />
         </Card>
       </Container>
+
+      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
+        Trở về trang chủ
+      </Button>}
 
       <ConfirmDialog
         open={confirm.value}

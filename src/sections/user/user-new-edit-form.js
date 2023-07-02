@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -18,12 +19,15 @@ import FormProvider, {
   RHFTextField
 } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import { useResponsive } from 'src/hooks/use-responsive';
+import { RouterLink } from 'src/routes/components';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function UserNewEditForm({ currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
+  const lgUp = useResponsive('up', 'lg');
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Bắt buộc điền Họ tên'),
@@ -62,7 +66,7 @@ export default function UserNewEditForm({ currentUser }) {
         data.belong = "LH1"
       else
         data.belong = "LH2";
-      
+
       if (currentUser) {
         delete data.account;
         delete data.password;
@@ -236,7 +240,7 @@ export default function UserNewEditForm({ currentUser }) {
               <RHFAutocomplete
                 name="role"
                 label="Chức danh"
-                options={["Admin", "Thu ngân", "Nhân viên"]}
+                options={["Admin", "Thu ngân", "Phục vụ"]}
                 getOptionLabel={(option) => option}
               />
 
@@ -250,10 +254,29 @@ export default function UserNewEditForm({ currentUser }) {
               <RHFTextField name="password" label="Mật khẩu" />
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            <Stack
+              alignItems="flex-end"
+              direction="row"
+              justifyContent="flex-end"
+              gap={2} sx={{ mt: 3 }}
+            >
+              {!lgUp && <Button
+                component={RouterLink}
+                href="/"
+                variant="contained"
+                sx={{ mt: "auto" }}>
+                Trở về trang chủ
+              </Button>}
+
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+                sx={{ backgroundColor: 'rgb(0, 167, 111)' }}
+              >
                 {!currentUser ? 'Tạo' : 'Cập nhật'}
               </LoadingButton>
+
             </Stack>
           </Card>
         </Grid>

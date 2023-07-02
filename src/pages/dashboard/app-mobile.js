@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // sections
-import { OverviewAppView } from 'src/sections/overview/app/view';
+import { LHMobileAppView } from 'src/sections/overview/app/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function OverviewAppPage() {
         <title> Dashboard: Trang chủ</title>
       </Helmet>
 
-      <OverviewAppView />
+      <LHMobileAppView />
     </>
   );
 }

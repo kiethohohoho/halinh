@@ -36,10 +36,10 @@ export default function NavVertical({ openNav, onCloseNav, onOpenNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  useEffect(() => {
-    onOpenNav();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // useEffect(() => {
+  //   onOpenNav();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
 
   const renderContent = (

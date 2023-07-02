@@ -6,6 +6,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // import { authDemoRoutes } from './auth-demo';
 // import { componentsRoutes } from './components';
 import { useAuthContext } from 'src/auth/hooks';
+import { useResponsive } from 'src/hooks/use-responsive';
 import { authRoutes } from './auth';
 import { dashboardRoutes } from './dashboard';
 import { mainRoutes } from './main';
@@ -14,6 +15,8 @@ import { mainRoutes } from './main';
 
 export default function Router() {
   const { user } = useAuthContext();
+
+  const lgUp = useResponsive('up', 'lg');
 
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
@@ -39,7 +42,7 @@ export default function Router() {
     // ...authDemoRoutes,
 
     // Dashboard routes
-    ...dashboardRoutes(user?.role),
+    ...dashboardRoutes(user?.role, lgUp),
 
     // // Main routes
     ...mainRoutes,

@@ -20,10 +20,14 @@ import { useAuthContext } from 'src/auth/hooks';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 import { paths } from 'src/routes/paths';
+import { useResponsive } from 'src/hooks/use-responsive';
+import { PATH_AFTER_LOGIN } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
 export default function JwtLoginView() {
+  const lgUp = useResponsive('up', 'lg');
+
   const { login } = useAuthContext();
 
   const router = useRouter();
@@ -61,17 +65,18 @@ export default function JwtLoginView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const user = await login?.(data.name, data.password);
-      if (user && user.role) {
-        let url_after_login;
+      let url_after_login;
+      if (user && user.role && lgUp) {
         if (user.role === 'Admin')
           url_after_login = paths.dashboard.user.list
-        else if (user.role === 'Nhân viên')
+        else if (user.role === 'Phục vụ')
           url_after_login = paths.dashboard.product.new
         else
           url_after_login = paths.dashboard.invoice.root
-
-        router.push(returnTo || url_after_login)
       }
+      if (!lgUp)
+        url_after_login = PATH_AFTER_LOGIN;
+      router.push(returnTo || url_after_login)
     } catch (error) {
       console.error(error);
       reset();
