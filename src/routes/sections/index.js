@@ -5,10 +5,10 @@ import { Navigate, useRoutes } from 'react-router-dom';
 //
 // import { authDemoRoutes } from './auth-demo';
 // import { componentsRoutes } from './components';
-// import { mainRoutes } from './main';
 import { useAuthContext } from 'src/auth/hooks';
 import { authRoutes } from './auth';
 import { dashboardRoutes } from './dashboard';
+import { mainRoutes } from './main';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ export default function Router() {
     ...dashboardRoutes(user?.role),
 
     // // Main routes
-    // ...mainRoutes,
+    ...mainRoutes,
 
     // // Components routes
     // ...componentsRoutes,

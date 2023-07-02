@@ -15,7 +15,7 @@ export default function CompactLayout({ children }) {
       <Container component="main">
         <Stack
           sx={{
-            py: 12,
+            // py: 12,
             m: 'auto',
             maxWidth: 400,
             minHeight: '100vh',
