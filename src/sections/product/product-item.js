@@ -47,7 +47,7 @@ export default function ProductItem({ product }) {
     }
   };
 
-  const renderLabels = (newLabel.enabled || saleLabel.enabled) && (
+  const renderLabels = (newLabel?.enabled || saleLabel?.enabled) && (
     <Stack
       direction="row"
       alignItems="center"

@@ -1,10 +1,10 @@
 import { Box, Container, IconButton, Tooltip } from '@mui/material';
-import { useSnackbar } from 'src/components/snackbar';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
+import { useSnackbar } from 'src/components/snackbar';
 import { paths } from 'src/routes/paths';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 // sections
@@ -51,23 +51,21 @@ export default function ProductCreatePage() {
           />
         </Container>
 
-        {/* <Card> */}
-          <Tooltip title="Generate voucher">
-            <IconButton
-              color="warning"
-              onClick={handleGenerateVoucher}
-            >
-              <Iconify width={30} icon="mdi:auto-mode" />
-            </IconButton>
-          </Tooltip>
-          Generate voucher
-          {
-            voucher &&
-            <Box sx={{ mt: 3 }}>
-              {voucher.value}
-            </Box>
-          }
-        {/* </Card> */}
+        <Tooltip title="Tạo voucher">
+          <IconButton
+            color="warning"
+            onClick={handleGenerateVoucher}
+          >
+            <Iconify width={30} icon="mdi:auto-mode" />
+          </IconButton>
+        </Tooltip>
+        Tạo voucher
+        {
+          voucher &&
+          <Box sx={{ mt: 3 }}>
+            {voucher.value}
+          </Box>
+        }
         {/* <ProductCreateView /> */}
       </Box >
     </>

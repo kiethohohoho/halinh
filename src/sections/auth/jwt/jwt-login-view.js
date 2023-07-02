@@ -20,6 +20,7 @@ import { useAuthContext } from 'src/auth/hooks';
 // components
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -60,13 +61,18 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await login?.(data.name, data.password);
-
-      if (returnTo)
-        router.push(returnTo)
-      else
-        router.replace(PATH_AFTER_LOGIN)
-
+      const user = await login?.(data.name, data.password);
+      if (user && user.role) {
+        let url_after_login;
+        if (user.role === 'Admin')
+          url_after_login = paths.dashboard.user.list
+        else if (user.role === 'Nhân viên')
+          url_after_login = paths.dashboard.product.new
+        else
+          url_after_login = PATH_AFTER_LOGIN
+          
+        router.push(returnTo || url_after_login)
+      }
     } catch (error) {
       console.error(error);
       reset();

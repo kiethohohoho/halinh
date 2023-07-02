@@ -72,8 +72,8 @@ export function useNavData() {
         // subheader: t('management'),
         items: [
           (user?.role === "Admin" && ({ title: "Danh sách tài khoản", path: paths.dashboard.user.list, })),
-          (user?.role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
           (user?.role === "Admin" && ({ title: "Tạo tài khoản", path: paths.dashboard.user.new, })),
+          (user?.role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
           (user?.role === "Nhân viên" && ({ title: "Tạo voucher", path: paths.dashboard.product.new, })),
 
           // USER

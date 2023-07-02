@@ -121,6 +121,8 @@ export function AuthProvider({ children }) {
         user,
       },
     });
+
+    return user;
   }, []);
 
   // REGISTER

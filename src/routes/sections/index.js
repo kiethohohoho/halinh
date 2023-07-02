@@ -3,15 +3,18 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // config
 // import { PATH_AFTER_LOGIN } from 'src/config-global';
 //
+// import { authDemoRoutes } from './auth-demo';
+// import { componentsRoutes } from './components';
+// import { mainRoutes } from './main';
+import { useAuthContext } from 'src/auth/hooks';
 import { authRoutes } from './auth';
-import { authDemoRoutes } from './auth-demo';
-import { componentsRoutes } from './components';
 import { dashboardRoutes } from './dashboard';
-import { mainRoutes } from './main';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { user } = useAuthContext();
+
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     // {
@@ -33,16 +36,16 @@ export default function Router() {
 
     // Auth routes
     ...authRoutes,
-    ...authDemoRoutes,
+    // ...authDemoRoutes,
 
     // Dashboard routes
-    ...dashboardRoutes,
+    ...dashboardRoutes(user?.role),
 
-    // Main routes
-    ...mainRoutes,
+    // // Main routes
+    // ...mainRoutes,
 
-    // Components routes
-    ...componentsRoutes,
+    // // Components routes
+    // ...componentsRoutes,
 
     // No match 404
     { path: '*', element: <Navigate to="/404" replace /> },
