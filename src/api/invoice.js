@@ -6,7 +6,7 @@ import { encodeParams } from 'src/utils/api';
 
 // ----------------------------------------------------------------------
 
-export function useGetUsers({
+export function useGetInvoices({
   Role,
   Belong,
   OrderBy,
@@ -17,30 +17,28 @@ export function useGetUsers({
   const params = {
     ...Role,
     ...Belong,
-    OrderBy: OrderBy || 'Role',
-    AES: AES || 'true',
+    OrderBy: OrderBy || 'CreateDate',
+    AES: AES || 'false',
     PageIndex: PageIndex || 0,
     PageSize: PageSize || 10
   };
 
   // Generate the URL with encoded parameters
-  const URL = `${endpoints.user.list}?${encodeParams(params)}`;
+  const URL = `${endpoints.invoice.list}?${encodeParams(params)}`;
 
   const { data, isLoading, error, isValidating, mutate } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      users: data?.data?.data || [],
-      usersLoading: isLoading,
-      usersError: error,
-      usersValidating: isValidating,
-      usersEmpty: !isLoading && !data?.length,
-      usersMutate: mutate,
+      invoices: data?.data?.data || [],
+      invoicesLoading: isLoading,
+      invoicesError: error,
+      invoicesValidating: isValidating,
+      invoicesEmpty: !isLoading && !data?.length,
+      invoicesMutate: mutate,
     }),
     [data, error, isLoading, isValidating, mutate]
   );
 
   return memoizedValue;
 }
-
-// ----------------------------------------------------------------------

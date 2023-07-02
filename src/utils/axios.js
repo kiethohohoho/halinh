@@ -57,4 +57,8 @@ export const endpoints = {
     details: '/api/product/details',
     search: '/api/product/search',
   },
+  invoice: {
+    list: '/api/bill/getallbill',
+    create: '/api/bill/postbill',
+  },
 };
