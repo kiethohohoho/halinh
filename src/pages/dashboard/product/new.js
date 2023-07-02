@@ -41,7 +41,7 @@ export default function ProductCreatePage() {
       <Box>
         <Container maxWidth={settings.themeStretch ? false : 'lg'}>
           <CustomBreadcrumbs
-            heading="Tạo Voucher"
+            heading="Lấy code giảm giá"
             links={[
               { name: '', href: paths.dashboard.root },
               // {
@@ -54,7 +54,7 @@ export default function ProductCreatePage() {
           />
         </Container>
 
-        <Tooltip title="Tạo voucher">
+        <Tooltip title="Lấy code giảm giá">
           <IconButton
             color="warning"
             onClick={handleGenerateVoucher}
@@ -62,7 +62,7 @@ export default function ProductCreatePage() {
             <Iconify width={30} icon="mdi:auto-mode" />
           </IconButton>
         </Tooltip>
-        <Typography sx={{ cursor: 'pointer' }} variant='span' onClick={handleGenerateVoucher}>Tạo voucher</Typography>
+        <Typography sx={{ cursor: 'pointer' }} variant='span' onClick={handleGenerateVoucher}>Lấy code giảm giá</Typography>
         {
           voucher &&
           <Box sx={{ mt: 2, px: 2, fontWeight: 'bold' }}>
