@@ -2,8 +2,8 @@ import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 // @mui
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
+// import Checkbox from '@mui/material/Checkbox';
+// import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
@@ -30,7 +30,7 @@ export default function ProductTableRow({
   const {
     value,
     createDate,
-    expired,
+    createName,
     // status,
   } = row;
 
@@ -41,9 +41,9 @@ export default function ProductTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>{value}</TableCell>
 
@@ -62,7 +62,9 @@ export default function ProductTableRow({
           />
         </TableCell>
 
-        <TableCell>
+        <TableCell>{createName}</TableCell>
+
+        {/* <TableCell>
           <ListItemText
             primary={format(new Date(expired), 'dd MMM yyyy', {
               locale: vi,
@@ -75,7 +77,7 @@ export default function ProductTableRow({
               typography: 'caption',
             }}
           />
-        </TableCell>
+        </TableCell> */}
 
         {/* <TableCell>
           <Label variant="soft" color={(status === 'có sẵn' && 'info') || 'default'}>
@@ -83,11 +85,11 @@ export default function ProductTableRow({
           </Label>
         </TableCell> */}
 
-        <TableCell align="right">
+        {/* <TableCell align="right">
           <IconButton color={popover.open ? 'primary' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <CustomPopover

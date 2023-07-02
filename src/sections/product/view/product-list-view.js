@@ -4,11 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import Tooltip from '@mui/material/Tooltip';
 // routes
 import { useRouter } from 'src/routes/hook';
 import { paths } from 'src/routes/paths';
@@ -21,7 +19,6 @@ import { useGetProducts } from 'src/api/product';
 // components
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
@@ -29,25 +26,24 @@ import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
-  TableSelectedAction,
   TableSkeleton,
   emptyRows,
   getComparator,
-  useTable,
+  useTable
 } from 'src/components/table';
 //
 // import ProductTableToolbar from '../product-table-toolbar';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { RouterLink } from 'src/routes/components';
-import ProductTableRow from '../product-table-row';
 import ProductTableFiltersResult from '../product-table-filters-result';
+import ProductTableRow from '../product-table-row';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'value', label: 'Mã voucher' },
   { id: 'createDate', label: 'Ngày tạo' },
-  { id: 'expired', label: 'Ngày hết hạn' },
+  { id: 'createName', label: 'Người tạo' },
   // { id: 'status', label: 'Status' },
   { id: '' },
 ];
@@ -202,25 +198,6 @@ export default function ProductListView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Tooltip title="Delete">
-                  <IconButton color="primary" onClick={confirm.onTrue}>
-                    <Iconify icon="solar:trash-bin-trash-bold" />
-                  </IconButton>
-                </Tooltip>
-              }
-            />
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                 <TableHeadCustom
@@ -230,12 +207,6 @@ export default function ProductListView() {
                   rowCount={tableData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
                 />
 
                 <TableBody>
@@ -288,9 +259,17 @@ export default function ProductListView() {
         </Card>
       </Container>
 
-      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
-        Trở về trang chủ
-      </Button>}
+      {!lgUp && (
+        <Button
+          component={RouterLink}
+          href="/"
+          size="large"
+          variant="contained"
+          sx={{ mt: 'auto' }}
+        >
+          Trở về trang chủ
+        </Button>
+      )}
 
       <ConfirmDialog
         open={confirm.value}
