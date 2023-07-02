@@ -40,12 +40,12 @@ export default function ProductCreatePage() {
           <CustomBreadcrumbs
             heading="Tạo Voucher"
             links={[
-              { name: 'Dashboard', href: paths.dashboard.root },
-              {
-                name: 'Quản lý Voucher',
-                href: paths.dashboard.product.root,
-              },
-              { name: 'Tạo voucher' },
+              { name: '', href: paths.dashboard.root },
+              // {
+              //   name: 'Quản lý Voucher',
+              //   href: paths.dashboard.product.root,
+              // },
+              // { name: 'Tạo voucher' },
             ]}
             sx={{ mb: { xs: 3, md: 5 } }}
           />
