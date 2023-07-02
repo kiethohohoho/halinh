@@ -17,7 +17,7 @@ export function useGetInvoices({
   const params = {
     ...Role,
     ...Belong,
-    OrderBy: OrderBy || 'CreateDate',
+    OrderBy: OrderBy || 'DateUsed',
     AES: AES || 'false',
     PageIndex: PageIndex || 0,
     PageSize: PageSize || 10

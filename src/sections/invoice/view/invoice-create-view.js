@@ -16,18 +16,18 @@ export default function InvoiceCreateView() {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new invoice"
+        heading="Tạo hóa đơn"
         links={[
           {
             name: 'Dashboard',
             href: paths.dashboard.root,
           },
           {
-            name: 'Invoice',
+            name: 'Quản lý hóa đơn',
             href: paths.dashboard.invoice.root,
           },
           {
-            name: 'New Invoice',
+            name: 'Tạo hóa đơn',
           },
         ]}
         sx={{

@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 // @mui
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,7 +11,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // components
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
@@ -43,19 +43,19 @@ export default function InvoiceTableToolbar({
     [onFilters]
   );
 
-  const handleFilterStartDate = useCallback(
-    (newValue) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
+  // const handleFilterStartDate = useCallback(
+  //   (newValue) => {
+  //     onFilters('startDate', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
-  const handleFilterEndDate = useCallback(
-    (newValue) => {
-      onFilters('endDate', newValue);
-    },
-    [onFilters]
-  );
+  // const handleFilterEndDate = useCallback(
+  //   (newValue) => {
+  //     onFilters('endDate', newValue);
+  //   },
+  //   [onFilters]
+  // );
 
   return (
     <>
@@ -77,13 +77,13 @@ export default function InvoiceTableToolbar({
             width: { xs: 1, md: 180 },
           }}
         >
-          <InputLabel>Service</InputLabel>
+          <InputLabel>Chi nhánh</InputLabel>
 
           <Select
             multiple
             value={filters.service}
             onChange={handleFilterService}
-            input={<OutlinedInput label="Service" />}
+            input={<OutlinedInput label="Chi nhánh" />}
             renderValue={(selected) => selected.map((value) => value).join(', ')}
             sx={{ textTransform: 'capitalize' }}
           >
@@ -96,7 +96,7 @@ export default function InvoiceTableToolbar({
           </Select>
         </FormControl>
 
-        <DatePicker
+        {/* <DatePicker
           label="Start date"
           value={filters.startDate}
           onChange={handleFilterStartDate}
@@ -119,14 +119,14 @@ export default function InvoiceTableToolbar({
           sx={{
             maxWidth: { md: 180 },
           }}
-        />
+        /> */}
 
         <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
           <TextField
             fullWidth
             value={filters.name}
             onChange={handleFilterName}
-            placeholder="Search customer or invoice number..."
+            placeholder="Tìm kiếm theo Tên khách hàng, SĐT và Code giảm giá..."
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -136,9 +136,9 @@ export default function InvoiceTableToolbar({
             }}
           />
 
-          {/* <IconButton onClick={popover.onOpen}>
+          <IconButton onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
-          </IconButton> */}
+          </IconButton>
         </Stack>
       </Stack>
 

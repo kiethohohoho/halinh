@@ -1,36 +1,36 @@
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 // @mui
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
-import { fCurrency } from 'src/utils/format-number';
 // components
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
-import Label from 'src/components/label';
+import { vi } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceTableRow({
-  row,
-  selected,
-  onViewRow,
-  onEditRow,
-  onDeleteRow,
-}) {
-  const { sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalAmount } = row;
+export default function InvoiceTableRow({ row, selected, onViewRow, onEditRow, onDeleteRow }) {
+  const {
+    typeService,
+    dateUsed,
+    phone,
+    codeKtv,
+    customerGroup,
+    customerOdd,
+    voucher,
+    customerName,
+    notedVoucher,
+    notedCustomer,
+  } = row;
 
   const confirm = useBoolean();
 
@@ -39,35 +39,16 @@ export default function InvoiceTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt={invoiceTo.name} sx={{ mr: 2 }}>
-            {invoiceTo.name.charAt(0).toUpperCase()}
-          </Avatar>
+        <TableCell>{customerName}</TableCell>
 
-          <ListItemText
-            disableTypography
-            primary={
-              <Typography variant="body2" noWrap>
-                {invoiceTo.name}
-              </Typography>
-            }
-            secondary={
-              <Link
-                noWrap
-                variant="body2"
-                onClick={onViewRow}
-                sx={{ color: 'text.disabled', cursor: 'pointer' }}
-              >
-                {invoiceNumber}
-              </Link>
-            }
-          />
-        </TableCell>
+        <TableCell>{phone}</TableCell>
+
+        <TableCell>{voucher}</TableCell>
 
         <TableCell>
           <ListItemText
-            primary={format(new Date(createDate), 'dd MMM yyyy')}
-            secondary={format(new Date(createDate), 'p')}
+            primary={format(new Date(dateUsed), 'dd MMM yyyy', { locale: vi })}
+            secondary={format(new Date(dateUsed), 'p', { locale: vi })}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -77,24 +58,19 @@ export default function InvoiceTableRow({
           />
         </TableCell>
 
-        <TableCell>
-          <ListItemText
-            primary={format(new Date(dueDate), 'dd MMM yyyy')}
-            secondary={format(new Date(dueDate), 'p')}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell>
+        <TableCell align="center">{typeService}</TableCell>
 
-        <TableCell>{fCurrency(totalAmount)}</TableCell>
+        <TableCell align="center">{codeKtv}</TableCell>
 
-        <TableCell align="center">{sent}</TableCell>
+        <TableCell align="center">{customerGroup}</TableCell>
 
-        <TableCell>
+        <TableCell align="center">{customerOdd}</TableCell>
+
+        <TableCell align="center">{notedVoucher}</TableCell>
+
+        <TableCell align="center">{notedCustomer}</TableCell>
+
+        {/* <TableCell>
           <Label
             variant="soft"
             color={
@@ -106,13 +82,13 @@ export default function InvoiceTableRow({
           >
             {status}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
-        <TableCell align="right" sx={{ px: 1 }}>
+        {/* <TableCell align="right" sx={{ px: 1 }}>
           <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <CustomPopover

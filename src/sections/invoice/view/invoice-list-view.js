@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // @mui
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -15,7 +15,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 // utils
 import { fTimestamp } from 'src/utils/format-time';
 // _mock
-import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 // components
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -29,24 +28,27 @@ import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
-  useTable
+  useTable,
 } from 'src/components/table';
 //
 import { useGetInvoices } from 'src/api/invoice';
 import { useResponsive } from 'src/hooks/use-responsive';
-import InvoiceTableFiltersResult from '../invoice-table-filters-result';
 import InvoiceTableRow from '../invoice-table-row';
 import InvoiceTableToolbar from '../invoice-table-toolbar';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Customer' },
-  { id: 'createDate', label: 'Create' },
-  { id: 'dueDate', label: 'Due' },
-  { id: 'price', label: 'Amount' },
-  { id: 'sent', label: 'Sent', align: 'center' },
-  { id: 'status', label: 'Status' },
+  { id: 'customerName', label: 'Tên khách hàng' },
+  { id: 'phone', label: 'SĐT' },
+  { id: 'voucher', label: 'Code giảm giá', minWidth: 120 },
+  { id: 'dateUsed', label: 'Ngày sử dụng DV' },
+  { id: 'typeService', label: 'Loại dịch vụ' },
+  { id: 'codeKtv', label: 'Mã số KTV' },
+  { id: 'customerGroup', label: 'Khách nhóm' },
+  { id: 'customerOdd', label: 'Khách lẻ' },
+  { id: 'notedVoucher', label: 'Ghi chú KM' },
+  { id: 'notedCustomer', label: 'Ghi chú Kh' },
   { id: '' },
 ];
 
@@ -74,9 +76,11 @@ export default function InvoiceListView() {
 
   const { invoices } = useGetInvoices({});
 
-  const [tableData, setTableData] = useState(_invoices);
+  const [tableData, setTableData] = useState(invoices);
 
-  console.log({ invoice: invoices[0], _invoice: _invoices[0] });
+  useEffect(() => {
+    setTableData(invoices);
+  }, [invoices]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -106,16 +110,6 @@ export default function InvoiceListView() {
     (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
-
-  // const getInvoiceLength = (status) => tableData.filter((item) => item.status === status).length;
-
-  // const getTotalAmount = (status) =>
-  //   sumBy(
-  //     tableData.filter((item) => item.status === status),
-  //     'totalAmount'
-  //   );
-
-  // const getPercentByStatus = (status) => (getInvoiceLength(status) / tableData.length) * 100;
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -162,10 +156,6 @@ export default function InvoiceListView() {
     },
     [router]
   );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
-  }, []);
 
   return (
     <>
@@ -265,20 +255,11 @@ export default function InvoiceListView() {
             onFilters={handleFilters}
             //
             dateError={dateError}
-            serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
+            serviceOptions={[
+              { id: 'LH1', name: 'Linh Hà 1', price: 1000000 },
+              { id: 'LH2', name: 'Linh Hà 2', price: 2000000 },
+            ].map((option) => option.name)}
           />
-
-          {canReset && (
-            <InvoiceTableFiltersResult
-              filters={filters}
-              onFilters={handleFilters}
-              //
-              onResetFilters={handleResetFilters}
-              //
-              results={dataFiltered.length}
-              sx={{ p: 2.5, pt: 0 }}
-            />
-          )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
@@ -300,8 +281,8 @@ export default function InvoiceListView() {
                     )
                     .map((row) => (
                       <InvoiceTableRow
-                        key={row.id}
-                        row={row}
+                        key={row.bill.id}
+                        row={row.bill}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onViewRow={() => handleViewRow(row.id)}
@@ -334,9 +315,17 @@ export default function InvoiceListView() {
         </Card>
       </Container>
 
-      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
-        Trở về trang chủ
-      </Button>}
+      {!lgUp && (
+        <Button
+          component={RouterLink}
+          href="/"
+          size="large"
+          variant="contained"
+          sx={{ mt: 'auto' }}
+        >
+          Trở về trang chủ
+        </Button>
+      )}
 
       <ConfirmDialog
         open={confirm.value}
@@ -382,8 +371,9 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   if (name) {
     inputData = inputData.filter(
       (invoice) =>
-        invoice.invoiceNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        invoice.invoiceTo.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        invoice.bill.voucher.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        invoice.bill.customerName.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        invoice.bill.phone.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
@@ -392,9 +382,13 @@ function applyFilter({ inputData, comparator, filters, dateError }) {
   }
 
   if (service.length) {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((filterItem) => service.includes(filterItem.service))
-    );
+    inputData = inputData.filter((invoice) => {
+      console.log(invoice.belong, service);
+      return (
+        (invoice.belong === 'LH1' && service.includes('Linh Hà 1')) ||
+        (invoice.belong === 'LH2' && service.includes('Linh Hà 2'))
+      );
+    });
   }
 
   if (!dateError) {
