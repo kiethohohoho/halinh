@@ -35,7 +35,7 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
       name: currentUser?.name || '',
       sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
-      belong: currentUser?.belong === "LH1" ? "Linh Hà 1" : "Linh Hà 2" || '',
+      belong: currentUser?.belong === 'LH1' ? 'Linh Hà 1' : 'Linh Hà 2' || '',
     }),
     [currentUser]
   );
@@ -52,10 +52,11 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data.belong === "Linh Hà 1")
-        data.belong = "LH1"
-      else
-        data.belong = "LH2";
+      if (data.belong === 'Linh Hà 1') data.belong = 'LH1';
+      else data.belong = 'LH2';
+
+      if (data.shift === 'Tối') data.belong = true;
+      else data.belong = false;
 
       data.id = currentUser.id;
       await axiosInstance.patch(endpoints.user.update, data);
@@ -100,15 +101,18 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
             <RHFAutocomplete
               name="role"
               label="Chức danh"
-              options={["Admin", "Thu ngân", "Phục vụ"]}
+              options={['Admin', 'Thu ngân', 'Phục vụ']}
               getOptionLabel={(option) => option}
             />
 
             <RHFAutocomplete
-              name="belong"
-              label="Chi nhánh"
-              options={["Linh Hà 1", "Linh Hà 2"]}
+              name="shift"
+              label="Ca làm việc"
+              options={['Tối', 'Sáng']}
+              getOptionLabel={(option) => option}
             />
+
+            <RHFAutocomplete name="belong" label="Chi nhánh" options={['Linh Hà 1', 'Linh Hà 2']} />
           </Box>
         </DialogContent>
 

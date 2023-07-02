@@ -33,6 +33,7 @@ export default function UserNewEditForm({ currentUser }) {
     name: Yup.string().required('Bắt buộc điền Họ tên'),
     sdt: Yup.string().required('Bắt buộc điền Số điện thoại'),
     role: Yup.string().required('Bắt buộc điền Chức danh'),
+    shift: Yup.string().required('Bắt buộc điền Ca làm việc'),
     belong: Yup.string().required('Bắt buộc điền Chi nhánh'),
     account: Yup.string().required('Bắt buộc điền Tài khoản'),
     password: Yup.string().required('Bắt buộc điền Mật khoản'),
@@ -43,6 +44,7 @@ export default function UserNewEditForm({ currentUser }) {
       name: currentUser?.name || '',
       sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
+      shift: currentUser?.role || '',
       belong: currentUser?.belong || '',
       account: currentUser?.account || '',
       password: currentUser?.password || '',
@@ -66,6 +68,11 @@ export default function UserNewEditForm({ currentUser }) {
         data.belong = "LH1"
       else
         data.belong = "LH2";
+      
+      if (data.shift === "Tối")
+        data.belong = true;
+      else
+        data.belong = false;
 
       if (currentUser) {
         delete data.account;
@@ -245,6 +252,13 @@ export default function UserNewEditForm({ currentUser }) {
               />
 
               <RHFAutocomplete
+                name="shift"
+                label="Ca làm việc"
+                options={["Tối", "Sáng"]}
+                getOptionLabel={(option) => option}
+              />
+
+              <RHFAutocomplete
                 name="belong"
                 label="Chi nhánh"
                 options={["Linh Hà 1", "Linh Hà 2"]}
@@ -258,7 +272,8 @@ export default function UserNewEditForm({ currentUser }) {
               alignItems="flex-end"
               direction="row"
               justifyContent="flex-end"
-              gap={2} sx={{ mt: 3 }}
+              gap={2} 
+              sx={{ mt: 3 }}
             >
               {!lgUp && <Button
                 component={RouterLink}

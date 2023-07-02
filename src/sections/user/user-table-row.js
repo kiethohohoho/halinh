@@ -19,7 +19,7 @@ import UserQuickEditForm from './user-quick-edit-form';
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow, onDeleteRow }) {
-  const { name, role, belong, isDeleted, sdt } = row;
+  const { name, role, belong, isDeleted, sdt, shift } = row;
 
   const confirm = useBoolean();
 
@@ -36,14 +36,15 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{belong === "LH1" ? "Linh Hà 1" : "Linh Hà 2"}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{shift ? "Tối" : "Sáng"}</TableCell>
+
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>
+          {belong === 'LH1' ? 'Linh Hà 1' : 'Linh Hà 2'}
+        </TableCell>
 
         <TableCell>
-          <Label
-            variant="soft"
-            color={isDeleted ? 'error' : 'success'}
-          >
-            {isDeleted ? "Ngừng hoạt động" : "Đang hoạt động"}
+          <Label variant="soft" color={isDeleted ? 'error' : 'success'}>
+            {isDeleted ? 'Ngừng hoạt động' : 'Đang hoạt động'}
           </Label>
         </TableCell>
 
@@ -59,7 +60,8 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
               sx={{ color: 'error.main' }}
               onClick={() => {
                 confirm.onTrue();
-              }}>
+              }}
+            >
               <Iconify icon="solar:trash-bin-trash-bold" />
             </IconButton>
           </Tooltip>
@@ -68,9 +70,14 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton> */}
         </TableCell>
-      </TableRow >
+      </TableRow>
 
-      <UserQuickEditForm onQuickEditRow={onQuickEditRow} currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <UserQuickEditForm
+        onQuickEditRow={onQuickEditRow}
+        currentUser={row}
+        open={quickEdit.value}
+        onClose={quickEdit.onFalse}
+      />
 
       <CustomPopover
         open={popover.open}
@@ -104,12 +111,20 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
         open={confirm.value}
         onClose={confirm.onFalse}
         title="Xóa tài khoản"
-        content={<div>Bạn có chắc muốn xóa <b>{row.name}</b> không?</div>}
+        content={
+          <div>
+            Bạn có chắc muốn xóa <b>{row.name}</b> không?
+          </div>
+        }
         action={
-          <Button variant="contained" color="error" onClick={() => {
-            onDeleteRow();
-            confirm.onFalse();
-          }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow();
+              confirm.onFalse();
+            }}
+          >
             Xóa
           </Button>
         }

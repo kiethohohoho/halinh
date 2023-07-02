@@ -4,23 +4,24 @@ import * as Yup from 'yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 // hooks
 import { useMemo } from 'react';
 import { useAuthContext } from 'src/auth/hooks';
-import FormProvider, {
-  RHFAutocomplete,
-  RHFTextField
-} from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { RouterLink } from 'src/routes/components';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
+  const lgUp = useResponsive('up', 'lg');
 
   const { user } = useAuthContext();
 
@@ -36,7 +37,7 @@ export default function AccountGeneral() {
       name: user?.fullname || '',
       sdt: user?.sdt || '',
       role: user?.role || '',
-      belong: user?.belong === "LH1" ? "Linh Hà 1" : "Linh Hà 2" || '',
+      belong: user?.belong === 'LH1' ? 'Linh Hà 1' : 'Linh Hà 2' || '',
     }),
     [user]
   );
@@ -53,10 +54,8 @@ export default function AccountGeneral() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data.belong === "Linh Hà 1")
-        data.belong = "LH1"
-      else
-        data.belong = "LH2";
+      if (data.belong === 'Linh Hà 1') data.belong = 'LH1';
+      else data.belong = 'LH2';
 
       await axiosInstance.patch(endpoints.user.updateProfile, data);
       enqueueSnackbar('Cập nhật thành công!');
@@ -84,21 +83,40 @@ export default function AccountGeneral() {
               <RHFTextField name="sdt" label="Số điện thoại" />
 
               <RHFAutocomplete
+                disabled={user?.role !== 'Admin'}
                 name="role"
                 label="Chức danh"
-                options={["Admin", "Thu ngân", "Phục vụ"]}
+                options={['Admin', 'Thu ngân', 'Phục vụ']}
                 getOptionLabel={(option) => option}
               />
 
               <RHFAutocomplete
+                disabled={user?.role !== 'Admin'}
                 name="belong"
                 label="Chi nhánh"
-                options={["Linh Hà 1", "Linh Hà 2"]}
+                options={['Linh Hà 1', 'Linh Hà 2']}
               />
             </Box>
 
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            <Stack
+              direction="row"
+              justifyContent="flex-end"
+              gap={2}
+              sx={{ mt: 3 }}
+              spacing={3}
+              alignItems="flex-end"
+            >
+              {!lgUp && (
+                <Button component={RouterLink} href="/" variant="contained" sx={{ mt: 'auto' }}>
+                  Trở về trang chủ
+                </Button>
+              )}
+              <LoadingButton
+                sx={{ backgroundColor: 'rgb(0, 167, 111)' }}
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+              >
                 Cập nhật
               </LoadingButton>
             </Stack>

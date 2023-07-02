@@ -27,7 +27,7 @@ import {
   TablePaginationCustom,
   emptyRows,
   getComparator,
-  useTable
+  useTable,
 } from 'src/components/table';
 //
 import { useGetUsers } from 'src/api/user';
@@ -41,11 +41,12 @@ import UserTableToolbar from '../user-table-toolbar';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Họ tên' },
-  { id: 'sdt', label: 'Số điện thoại', width: 180 },
-  { id: 'role', label: 'Chức danh', width: 180 },
-  { id: 'belong', label: 'Chi nhánh', width: 220 },
-  { id: 'isDeleted', label: 'Trạng thái', width: 100 },
-  { id: '', width: 88 },
+  { id: 'sdt', label: 'Số điện thoại' },
+  { id: 'role', label: 'Chức danh' },
+  { id: 'shift', label: 'Ca làm việc' },
+  { id: 'belong', label: 'Chi nhánh' },
+  { id: 'isDeleted', label: 'Trạng thái' },
+  { id: '' },
 ];
 
 const defaultFilters = {
@@ -75,7 +76,7 @@ export default function UserListView() {
 
   useEffect(() => {
     setTableData(users);
-  }, [users])
+  }, [users]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -114,7 +115,6 @@ export default function UserListView() {
         usersMutate();
         table.onUpdatePageDeleteRow(dataInPage.length);
       });
-
     },
     [dataInPage.length, enqueueSnackbar, table, usersMutate]
   );
@@ -167,7 +167,7 @@ export default function UserListView() {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={["Admin", "Thu ngân", "Phục vụ"]}
+            roleOptions={['Admin', 'Thu ngân', 'Phục vụ']}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
@@ -196,7 +196,9 @@ export default function UserListView() {
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.id)}
-                        onQuickEditRow={() => { usersMutate() }}
+                        onQuickEditRow={() => {
+                          usersMutate();
+                        }}
                       />
                     ))}
 
@@ -224,9 +226,17 @@ export default function UserListView() {
         </Card>
       </Container>
 
-      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
-        Trở về trang chủ
-      </Button>}
+      {!lgUp && (
+        <Button
+          component={RouterLink}
+          href="/"
+          size="large"
+          variant="contained"
+          sx={{ mt: 'auto' }}
+        >
+          Trở về trang chủ
+        </Button>
+      )}
 
       <ConfirmDialog
         open={confirm.value}
