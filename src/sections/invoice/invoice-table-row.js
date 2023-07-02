@@ -1,33 +1,31 @@
-import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import PropTypes from 'prop-types';
 // @mui
-import Link from '@mui/material/Link';
-import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
 import { fCurrency } from 'src/utils/format-number';
 // components
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
 export default function InvoiceTableRow({
   row,
   selected,
-  onSelectRow,
   onViewRow,
   onEditRow,
   onDeleteRow,
@@ -41,10 +39,6 @@ export default function InvoiceTableRow({
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
-
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar alt={invoiceTo.name} sx={{ mr: 2 }}>
             {invoiceTo.name.charAt(0).toUpperCase()}
@@ -179,7 +173,6 @@ export default function InvoiceTableRow({
 InvoiceTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
   onEditRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
   onViewRow: PropTypes.func,
   row: PropTypes.object,
   selected: PropTypes.bool,

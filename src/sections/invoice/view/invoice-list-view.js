@@ -5,15 +5,11 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { alpha, useTheme } from '@mui/material/styles';
-import Tab from '@mui/material/Tab';
+import { useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import Tabs from '@mui/material/Tabs';
-import Tooltip from '@mui/material/Tooltip';
 // routes
 import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hook';
@@ -28,7 +24,6 @@ import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
-import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
@@ -38,8 +33,7 @@ import {
   TableHeadCustom,
   TableNoData,
   TablePaginationCustom,
-  TableSelectedAction,
-  useTable,
+  useTable
 } from 'src/components/table';
 //
 import { useGetInvoices } from 'src/api/invoice';
@@ -85,7 +79,7 @@ export default function InvoiceListView() {
 
   const [tableData, setTableData] = useState(_invoices);
 
-  console.log({invoice: invoices[0], _invoice: _invoices[0]});
+  console.log({ invoice: invoices[0], _invoice: _invoices[0] });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -125,14 +119,6 @@ export default function InvoiceListView() {
     );
 
   const getPercentByStatus = (status) => (getInvoiceLength(status) / tableData.length) * 100;
-
-  const TABS = [
-    { value: 'all', label: 'All', color: 'default', count: tableData.length },
-    { value: 'paid', label: 'Paid', color: 'success', count: getInvoiceLength('paid') },
-    { value: 'pending', label: 'Pending', color: 'warning', count: getInvoiceLength('pending') },
-    { value: 'overdue', label: 'Overdue', color: 'error', count: getInvoiceLength('overdue') },
-    { value: 'draft', label: 'Draft', color: 'default', count: getInvoiceLength('draft') },
-  ];
 
   const handleFilters = useCallback(
     (name, value) => {
@@ -180,13 +166,6 @@ export default function InvoiceListView() {
     [router]
   );
 
-  const handleFilterStatus = useCallback(
-    (event, newValue) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
-
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -195,18 +174,18 @@ export default function InvoiceListView() {
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="List"
+          heading="Danh sách hóa đơn"
           links={[
             {
               name: 'Dashboard',
               href: paths.dashboard.root,
             },
             {
-              name: 'Invoice',
+              name: 'Quản lý hoá đơn',
               href: paths.dashboard.invoice.root,
             },
             {
-              name: 'List',
+              name: 'Danh sách',
             },
           ]}
           action={
@@ -216,7 +195,7 @@ export default function InvoiceListView() {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Invoice
+              Tạo hóa đơn
             </Button>
           }
           sx={{
@@ -284,34 +263,6 @@ export default function InvoiceListView() {
         </Card>
 
         <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                label={tab.label}
-                iconPosition="end"
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={tab.color}
-                  >
-                    {tab.count}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
           <InvoiceTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -333,45 +284,6 @@ export default function InvoiceListView() {
           )}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-            <TableSelectedAction
-              dense={table.dense}
-              numSelected={table.selected.length}
-              rowCount={tableData.length}
-              onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData.map((row) => row.id)
-                )
-              }
-              action={
-                <Stack direction="row">
-                  <Tooltip title="Sent">
-                    <IconButton color="primary">
-                      <Iconify icon="iconamoon:send-fill" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Download">
-                    <IconButton color="primary">
-                      <Iconify icon="eva:download-outline" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Print">
-                    <IconButton color="primary">
-                      <Iconify icon="solar:printer-minimalistic-bold" />
-                    </IconButton>
-                  </Tooltip>
-
-                  <Tooltip title="Delete">
-                    <IconButton color="primary" onClick={confirm.onTrue}>
-                      <Iconify icon="solar:trash-bin-trash-bold" />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              }
-            />
-
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -381,12 +293,6 @@ export default function InvoiceListView() {
                   rowCount={tableData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
-                  onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData.map((row) => row.id)
-                    )
-                  }
                 />
 
                 <TableBody>

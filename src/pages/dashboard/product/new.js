@@ -1,4 +1,4 @@
-import { Box, Container, IconButton, Tooltip } from '@mui/material';
+import { Box, Container, IconButton, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -59,7 +59,7 @@ export default function ProductCreatePage() {
             <Iconify width={30} icon="mdi:auto-mode" />
           </IconButton>
         </Tooltip>
-        Tạo voucher
+        <Typography sx={{ cursor: 'pointer' }} variant='span' onClick={handleGenerateVoucher}>Tạo voucher</Typography>
         {
           voucher &&
           <Box sx={{ mt: 2, px: 2, fontWeight: 'bold' }}>
@@ -69,7 +69,7 @@ export default function ProductCreatePage() {
                 color="info"
                 onClick={() => {
                   navigator.clipboard.writeText(voucher.value);
-                  enqueueSnackbar('Copy thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } });
+                  enqueueSnackbar('Copy thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'center' } });
                 }}
               >
                 <Iconify icon="uiw:copy" ml={1} width={20} />
