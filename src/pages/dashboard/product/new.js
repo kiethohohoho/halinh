@@ -23,10 +23,10 @@ export default function ProductCreatePage() {
   const handleGenerateVoucher = () => {
     axiosInstance.post(endpoints.product.gen)
       .then(({ data }) => {
-        enqueueSnackbar('Tạo voucher thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'center' } });
+        enqueueSnackbar('Lấy code giảm giá thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'center' } });
         setVoucher(data);
       }).catch((err) => {
-        enqueueSnackbar('Tạo voucher thất bại!', {
+        enqueueSnackbar('Lấy code giảm giá thất bại!', {
           anchorOrigin: { vertical: 'bottom', horizontal: 'center' }, variant: 'error'
         });
       })
@@ -35,7 +35,7 @@ export default function ProductCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Tạo Voucher</title>
+        <title> Dashboard: Lấy code giảm giá</title>
       </Helmet>
 
       <Box>
