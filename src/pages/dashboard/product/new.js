@@ -20,11 +20,11 @@ export default function ProductCreatePage() {
   const handleGenerateVoucher = () => {
     axiosInstance.post(endpoints.product.gen)
       .then(({ data }) => {
-        enqueueSnackbar('Tạo voucher thành công!');
+        enqueueSnackbar('Tạo voucher thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } });
         setVoucher(data);
       }).catch((err) => {
         enqueueSnackbar('Tạo voucher thất bại!', {
-          variant: 'error'
+          anchorOrigin: { vertical: 'bottom', horizontal: 'right' }, variant: 'error'
         });
       })
   };
@@ -62,8 +62,19 @@ export default function ProductCreatePage() {
         Tạo voucher
         {
           voucher &&
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 2, px: 2, fontWeight: 'bold' }}>
             {voucher.value}
+            <Tooltip title="Copy mã voucher">
+              <IconButton
+                color="info"
+                onClick={() => {
+                  navigator.clipboard.writeText(voucher.value);
+                  enqueueSnackbar('Copy thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'right' } });
+                }}
+              >
+                <Iconify icon="uiw:copy" ml={1} width={20} />
+              </IconButton>
+            </Tooltip>
           </Box>
         }
         {/* <ProductCreateView /> */}
