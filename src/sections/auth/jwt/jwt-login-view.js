@@ -47,8 +47,8 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    name: 'vu',
-    password: '123123',
+    name: '',
+    password: '',
   };
 
   const methods = useForm({
