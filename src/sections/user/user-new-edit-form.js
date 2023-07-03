@@ -14,13 +14,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 // routes
 // assets
 // components
-import FormProvider, {
-  RHFAutocomplete,
-  RHFTextField
-} from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 import { useResponsive } from 'src/hooks/use-responsive';
 import { RouterLink } from 'src/routes/components';
+import { useRouter } from 'src/routes/hook';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
@@ -28,12 +26,13 @@ import axiosInstance, { endpoints } from 'src/utils/axios';
 export default function UserNewEditForm({ currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
   const lgUp = useResponsive('up', 'lg');
+  const router = useRouter();
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Bắt buộc điền Họ tên'),
     sdt: Yup.string().required('Bắt buộc điền Số điện thoại'),
     role: Yup.string().required('Bắt buộc điền Chức danh'),
-    shift: Yup.string().required('Bắt buộc điền Ca làm việc'),
+    // shift: Yup.string().required('Bắt buộc điền Ca làm việc'),
     belong: Yup.string().required('Bắt buộc điền Chi nhánh'),
     account: Yup.string().required('Bắt buộc điền Tài khoản'),
     password: Yup.string().required('Bắt buộc điền Mật khoản'),
@@ -44,7 +43,7 @@ export default function UserNewEditForm({ currentUser }) {
       name: currentUser?.name || '',
       sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
-      shift: currentUser?.role || '',
+      // shift: currentUser?.role || '',
       belong: currentUser?.belong || '',
       account: currentUser?.account || '',
       password: currentUser?.password || '',
@@ -58,21 +57,15 @@ export default function UserNewEditForm({ currentUser }) {
   });
 
   const {
+    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (data.belong === "Linh Hà 1")
-        data.belong = "LH1"
-      else
-        data.belong = "LH2";
-      
-      if (data.shift === "Tối")
-        data.belong = true;
-      else
-        data.belong = false;
+      if (data.belong === 'Linh Hà 1') data.belong = 'LH1';
+      else data.belong = 'LH2';
 
       if (currentUser) {
         delete data.account;
@@ -80,127 +73,20 @@ export default function UserNewEditForm({ currentUser }) {
         await axiosInstance.patch(endpoints.user.update, data);
       } else {
         await axiosInstance.post(endpoints.user.create, data);
+        reset();
+        router.push('/');
       }
-      enqueueSnackbar(currentUser ? 'Cập nhật thành công!' : 'Tạo thành công!');
+      enqueueSnackbar(currentUser ? 'Cập nhật thành công!' : 'Tạo thành công!', {
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
     } catch (error) {
       console.error(error);
     }
   });
 
-  // const handleDrop = useCallback(
-  //   (acceptedFiles) => {
-  //     const file = acceptedFiles[0];
-
-  //     const newFile = Object.assign(file, {
-  //       preview: URL.createObjectURL(file),
-  //     });
-
-  //     if (file) {
-  //       setValue('avatarUrl', newFile, { shouldValidate: true });
-  //     }
-  //   },
-  //   [setValue]
-  // );
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        {/* <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {currentUser && (
-              <Label
-                color={
-                  (values.status === 'active' && 'success') ||
-                  (values.status === 'banned' && 'error') ||
-                  'warning'
-                }
-                sx={{ position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 3,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            {currentUser && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) =>
-                          field.onChange(event.target.checked ? 'banned' : 'active')
-                        }
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
-
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-
-            {currentUser && (
-              <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
-                <Button variant="soft" color="error">
-                  Delete User
-                </Button>
-              </Stack>
-            )}
-          </Card>
-        </Grid> */}
-
         <Grid xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -215,53 +101,34 @@ export default function UserNewEditForm({ currentUser }) {
               <RHFTextField name="name" label="Họ tên" />
               <RHFTextField name="sdt" label="Số điện thoại" />
 
-              {/* <RHFAutocomplete
-                name="country"
-                label="Country"
-                options={countries.map((country) => country.label)}
-                getOptionLabel={(option) => option}
-                isOptionEqualToValue={(option, value) => option === value}
-                renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
-                    </li>
-                  );
-                }}
-              /> */}
-
               <RHFAutocomplete
                 name="role"
                 label="Chức danh"
-                options={["Admin", "Thu ngân", "Phục vụ"]}
+                options={[
+                  'Admin',
+                  'Tổng quản lý hệ thống',
+                  'Tổng quản lý chi nhánh',
+                  'Quản lý ca sáng',
+                  'Quản lý ca tối',
+                  'Thu ngân ca sáng',
+                  'Thu ngân ca tối',
+                  'Phục vụ ca sáng',
+                  'Phục vụ ca tối',
+                ]}
                 getOptionLabel={(option) => option}
               />
 
-              <RHFAutocomplete
+              {/* <RHFAutocomplete
                 name="shift"
                 label="Ca làm việc"
-                options={["Tối", "Sáng"]}
+                options={['Tối', 'Sáng']}
                 getOptionLabel={(option) => option}
-              />
+              /> */}
 
               <RHFAutocomplete
                 name="belong"
                 label="Chi nhánh"
-                options={["Linh Hà 1", "Linh Hà 2"]}
+                options={['Linh Hà 1', 'Linh Hà 2']}
               />
 
               <RHFTextField name="account" label="Tài khoản" />
@@ -272,16 +139,14 @@ export default function UserNewEditForm({ currentUser }) {
               alignItems="flex-end"
               direction="row"
               justifyContent="flex-end"
-              gap={2} 
+              gap={2}
               sx={{ mt: 3 }}
             >
-              {!lgUp && <Button
-                component={RouterLink}
-                href="/"
-                variant="contained"
-                sx={{ mt: "auto" }}>
-                Trở về trang chủ
-              </Button>}
+              {!lgUp && (
+                <Button component={RouterLink} href="/" variant="contained" sx={{ mt: 'auto' }}>
+                  Trở về trang chủ
+                </Button>
+              )}
 
               <LoadingButton
                 type="submit"
@@ -291,7 +156,6 @@ export default function UserNewEditForm({ currentUser }) {
               >
                 {!currentUser ? 'Tạo' : 'Cập nhật'}
               </LoadingButton>
-
             </Stack>
           </Card>
         </Grid>

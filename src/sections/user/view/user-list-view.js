@@ -43,7 +43,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Họ tên' },
   { id: 'sdt', label: 'Số điện thoại' },
   { id: 'role', label: 'Chức danh' },
-  { id: 'shift', label: 'Ca làm việc' },
   { id: 'belong', label: 'Chi nhánh' },
   { id: 'isDeleted', label: 'Trạng thái' },
   { id: '' },

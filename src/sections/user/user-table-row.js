@@ -19,7 +19,7 @@ import UserQuickEditForm from './user-quick-edit-form';
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow, onDeleteRow }) {
-  const { name, role, belong, isDeleted, sdt, shift } = row;
+  const { name, role, belong, isDeleted, sdt } = row;
 
   const confirm = useBoolean();
 
@@ -35,8 +35,6 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{sdt}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{shift ? "Tối" : "Sáng"}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
           {belong === 'LH1' ? 'Linh Hà 1' : 'Linh Hà 2'}

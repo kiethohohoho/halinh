@@ -58,9 +58,14 @@ export default function AccountGeneral() {
       else data.belong = 'LH2';
 
       await axiosInstance.patch(endpoints.user.updateProfile, data);
-      enqueueSnackbar('Cập nhật thành công!');
+      enqueueSnackbar('Cập nhật thành công!', {
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
     } catch (error) {
-      enqueueSnackbar('Cập nhật thất bại!', { variant: 'error' });
+      enqueueSnackbar('Cập nhật thất bại!', {
+        variant: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
       console.error(error);
     }
   });
@@ -83,19 +88,31 @@ export default function AccountGeneral() {
               <RHFTextField name="sdt" label="Số điện thoại" />
 
               <RHFAutocomplete
-                disabled={user?.role !== 'Admin'}
+                disabled={user?.role !== 'Admin' || user?.role !== 'Tổng quản lý chi nhánh'}
                 name="role"
                 label="Chức danh"
-                options={['Admin', 'Thu ngân', 'Phục vụ']}
+                options={[
+                  'Admin',
+                  'Tổng quản lý hệ thống',
+                  'Tổng quản lý chi nhánh',
+                  'Quản lý ca sáng',
+                  'Quản lý ca tối',
+                  'Thu ngân ca sáng',
+                  'Thu ngân ca tối',
+                  'Phục vụ ca sáng',
+                  'Phục vụ ca tối',
+                ]}
                 getOptionLabel={(option) => option}
               />
 
-              <RHFAutocomplete
-                disabled={user?.role !== 'Admin'}
-                name="belong"
-                label="Chi nhánh"
-                options={['Linh Hà 1', 'Linh Hà 2']}
-              />
+              {(user?.role !== 'Admin' || user?.role !== 'Tổng quản lý chi nhánh') && (
+                <RHFAutocomplete
+                  disabled
+                  name="belong"
+                  label="Chi nhánh"
+                  options={['Linh Hà 1', 'Linh Hà 2']}
+                />
+              )}
             </Box>
 
             <Stack

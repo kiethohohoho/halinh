@@ -18,18 +18,23 @@ export default function ProductCreatePage() {
   const lgUp = useResponsive('up', 'lg');
   const { enqueueSnackbar } = useSnackbar();
   const settings = useSettingsContext();
-  const [voucher, setVoucher] = useState()
+  const [voucher, setVoucher] = useState();
 
   const handleGenerateVoucher = () => {
-    axiosInstance.post(endpoints.product.gen)
+    axiosInstance
+      .post(endpoints.product.gen)
       .then(({ data }) => {
-        enqueueSnackbar('Lấy code giảm giá thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'center' } });
-        setVoucher(data);
-      }).catch((err) => {
-        enqueueSnackbar('Lấy code giảm giá thất bại!', {
-          anchorOrigin: { vertical: 'bottom', horizontal: 'center' }, variant: 'error'
+        enqueueSnackbar('Lấy code giảm giá thành công!', {
+          anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
         });
+        setVoucher(data);
       })
+      .catch((err) => {
+        enqueueSnackbar('Lấy code giảm giá thất bại!', {
+          anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+          variant: 'error',
+        });
+      });
   };
 
   return (
@@ -55,16 +60,14 @@ export default function ProductCreatePage() {
         </Container>
 
         <Tooltip title="Lấy code giảm giá">
-          <IconButton
-            color="warning"
-            onClick={handleGenerateVoucher}
-          >
+          <IconButton color="warning" onClick={handleGenerateVoucher}>
             <Iconify width={30} icon="mdi:auto-mode" />
           </IconButton>
         </Tooltip>
-        <Typography sx={{ cursor: 'pointer' }} variant='span' onClick={handleGenerateVoucher}>Lấy code giảm giá</Typography>
-        {
-          voucher &&
+        <Typography sx={{ cursor: 'pointer' }} variant="span" onClick={handleGenerateVoucher}>
+          Lấy code giảm giá
+        </Typography>
+        {voucher && (
           <Box sx={{ mt: 2, px: 2, fontWeight: 'bold' }}>
             <span style={{ marginRight: 8 }}>{voucher.value}</span>
             <Tooltip title="Copy mã voucher">
@@ -72,20 +75,30 @@ export default function ProductCreatePage() {
                 color="info"
                 onClick={() => {
                   navigator.clipboard.writeText(voucher.value);
-                  enqueueSnackbar('Copy thành công!', { anchorOrigin: { vertical: 'bottom', horizontal: 'center' } });
+                  enqueueSnackbar('Copy thành công!', {
+                    anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+                  });
                 }}
               >
                 <Iconify icon="uiw:copy" width={20} />
               </IconButton>
             </Tooltip>
           </Box>
-        }
+        )}
         {/* <ProductCreateView /> */}
-      </Box >
+      </Box>
 
-      {!lgUp && <Button component={RouterLink} href="/" size="large" variant="contained" sx={{ mt: "auto" }}>
-        Trở về trang chủ
-      </Button>}
+      {!lgUp && (
+        <Button
+          component={RouterLink}
+          href="/"
+          size="large"
+          variant="contained"
+          sx={{ mt: 'auto' }}
+        >
+          Trở về trang chủ
+        </Button>
+      )}
     </>
-  )
+  );
 }

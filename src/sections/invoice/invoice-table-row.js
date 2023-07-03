@@ -64,7 +64,9 @@ export default function InvoiceTableRow({ row, selected, onViewRow, onEditRow, o
 
         <TableCell align="center">{customerGroup}</TableCell>
 
-        <TableCell align="center">{customerOdd}</TableCell>
+        <TableCell align="center" sx={{ color: '#5be584' }}>
+          {customerOdd ? '✔' : ''}
+        </TableCell>
 
         <TableCell align="center">{notedVoucher}</TableCell>
 

@@ -55,14 +55,17 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
       if (data.belong === 'Linh Hà 1') data.belong = 'LH1';
       else data.belong = 'LH2';
 
-      if (data.shift === 'Tối') data.belong = true;
-      else data.belong = false;
-
       data.id = currentUser.id;
       await axiosInstance.patch(endpoints.user.update, data);
-      enqueueSnackbar('Cập nhật thành công!');
+      enqueueSnackbar('Cập nhật thành công!', {
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
       onQuickEditRow();
     } catch (error) {
+      enqueueSnackbar('Cập nhật thất bại!', {
+        variant: 'error',
+        anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+      });
       console.error(error);
     }
   });
@@ -101,7 +104,17 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
             <RHFAutocomplete
               name="role"
               label="Chức danh"
-              options={['Admin', 'Thu ngân', 'Phục vụ']}
+              options={[
+                'Admin',
+                'Tổng quản lý hệ thống',
+                'Tổng quản lý chi nhánh',
+                'Quản lý ca sáng',
+                'Quản lý ca tối',
+                'Thu ngân ca sáng',
+                'Thu ngân ca tối',
+                'Phục vụ ca sáng',
+                'Phục vụ ca tối',
+              ]}
               getOptionLabel={(option) => option}
             />
 
