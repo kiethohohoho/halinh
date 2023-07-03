@@ -67,16 +67,18 @@ export default function UserTableRow({
             </Tooltip>
           )}
 
-          <Tooltip title="Xóa" placement="top" arrow>
-            <IconButton
-              sx={{ color: 'error.main' }}
-              onClick={() => {
-                confirm.onTrue();
-              }}
-            >
-              <Iconify icon="solar:trash-bin-trash-bold" />
-            </IconButton>
-          </Tooltip>
+          {canEdit && (
+            <Tooltip title="Xóa" placement="top" arrow>
+              <IconButton
+                sx={{ color: 'error.main' }}
+                onClick={() => {
+                  confirm.onTrue();
+                }}
+              >
+                <Iconify icon="solar:trash-bin-trash-bold" />
+              </IconButton>
+            </Tooltip>
+          )}
 
           {/* <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
             <Iconify icon="eva:more-vertical-fill" />
