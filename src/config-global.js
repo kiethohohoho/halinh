@@ -31,4 +31,19 @@ export const AUTH0_API = {
 export const MAPBOX_API = process.env.REACT_APP_MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = "/"; // as '/dashboard'
+export const PATH_AFTER_LOGIN = '/'; // as '/dashboard'
+
+export const BOSS_ROLES_LEVEL = [
+  {
+    name: 'Admin',
+    level: 3,
+  },
+  {
+    name: 'Quản lý hệ thống',
+    level: 2,
+  },
+  {
+    name: 'Quản lý chi nhánh',
+    level: 1,
+  },
+];

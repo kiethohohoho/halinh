@@ -14,12 +14,21 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
 //
+import { compareRoleLevel } from 'src/utils/roles';
 import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
-
-export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow, onDeleteRow }) {
+export default function UserTableRow({
+  row,
+  authUserRole,
+  selected,
+  onEditRow,
+  onQuickEditRow,
+  onDeleteRow,
+}) {
   const { name, role, belong, isDeleted, sdt } = row;
+
+  const canEdit = compareRoleLevel(authUserRole, role);
 
   const confirm = useBoolean();
 
@@ -47,11 +56,16 @@ export default function UserTableRow({ row, selected, onEditRow, onQuickEditRow,
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-          <Tooltip title="Chỉnh sửa" placement="top" arrow>
-            <IconButton color={quickEdit.value ? 'inherit' : 'default'} onClick={quickEdit.onTrue}>
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>
-          </Tooltip>
+          {canEdit && (
+            <Tooltip title="Chỉnh sửa" placement="top" arrow>
+              <IconButton
+                color={quickEdit.value ? 'inherit' : 'default'}
+                onClick={quickEdit.onTrue}
+              >
+                <Iconify icon="solar:pen-bold" />
+              </IconButton>
+            </Tooltip>
+          )}
 
           <Tooltip title="Xóa" placement="top" arrow>
             <IconButton
@@ -136,5 +150,6 @@ UserTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onQuickEditRow: PropTypes.func,
   row: PropTypes.object,
+  authUserRole: PropTypes.string,
   selected: PropTypes.bool,
 };

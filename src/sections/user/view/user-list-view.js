@@ -31,6 +31,7 @@ import {
 } from 'src/components/table';
 //
 import { useGetUsers } from 'src/api/user';
+import { useAuthContext } from 'src/auth/hooks';
 import { useSnackbar } from 'src/components/snackbar';
 import { useResponsive } from 'src/hooks/use-responsive';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -60,6 +61,10 @@ export default function UserListView() {
   const lgUp = useResponsive('up', 'lg');
 
   const table = useTable();
+
+  const {
+    user: { role: authUserRole },
+  } = useAuthContext();
 
   const { users, usersMutate } = useGetUsers({});
 
@@ -191,6 +196,7 @@ export default function UserListView() {
                       <UserTableRow
                         key={row.id}
                         row={row}
+                        authUserRole={authUserRole}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}

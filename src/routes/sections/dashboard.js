@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 // components
 import { LoadingScreen } from 'src/components/loading-screen';
+import { navbarRoles } from 'src/layouts/dashboard/config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -66,38 +67,36 @@ const InvoiceEditPage = lazy(() => import('src/pages/dashboard/invoice/edit'));
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = (role, lgUp) => {
-  if (!role) return [
-    {
-      path: '',
-      element: (
-        <AuthGuard>
-          <DashboardLayout>
-            <Suspense fallback={<LoadingScreen />}>
-              <Outlet />
-            </Suspense>
-          </DashboardLayout>
-        </AuthGuard>
-      )
-    },
-  ];
+  if (!role)
+    return [
+      {
+        path: '',
+        element: (
+          <AuthGuard>
+            <DashboardLayout>
+              <Suspense fallback={<LoadingScreen />}>
+                <Outlet />
+              </Suspense>
+            </DashboardLayout>
+          </AuthGuard>
+        ),
+      },
+    ];
+
+  const { threeMainBoss, staff, cashier, threeMainBossAndCashier } = navbarRoles(role);
 
   let IndexPage = null;
-  if (role === 'Admin')
-    IndexPage = UserListPage
-  else if (role === 'Phục vụ')
-    IndexPage = ProductCreatePage
-  else if (role === 'Thu ngân')
-    IndexPage = InvoiceListPage
+  if (threeMainBoss) IndexPage = UserListPage;
+  else if (staff) IndexPage = ProductCreatePage;
+  else if (cashier) IndexPage = InvoiceListPage;
 
   if (!lgUp) {
     IndexPage = LHMobileIndexPage;
   }
 
   let IndexProductPage = null;
-  if (role === 'Admin')
-    IndexProductPage = ProductListPage
-  else if (role === 'Phục vụ')
-    IndexProductPage = ProductCreatePage
+  if (threeMainBoss) IndexProductPage = ProductListPage;
+  else if (staff) IndexProductPage = ProductCreatePage;
 
   return [
     {
@@ -121,35 +120,35 @@ export const dashboardRoutes = (role, lgUp) => {
         {
           path: 'user',
           children: [
-            (role === 'Admin' && { element: <UserListPage />, index: true }),
+            threeMainBoss && { element: <UserListPage />, index: true },
             // { path: 'profile', element: <UserProfilePage /> },
             // { path: 'cards', element: <UserCardsPage /> },
-            (role === 'Admin' && { path: 'list', element: <UserListPage /> }),
-            (role === 'Admin' && { path: 'new', element: <UserCreatePage /> }),
+            threeMainBoss && { path: 'list', element: <UserListPage /> },
+            threeMainBoss && { path: 'new', element: <UserCreatePage /> },
             // { path: ':id/edit', element: <UserEditPage /> },
             { path: 'account', element: <UserAccountPage /> },
           ],
         },
-        (role !== 'Thu ngân' && {
+        !cashier && {
           path: 'product',
           children: [
             { element: <IndexProductPage />, index: true },
-            (role === 'Admin' && { path: 'list', element: <ProductListPage /> }),
+            threeMainBoss && { path: 'list', element: <ProductListPage /> },
             { path: ':id', element: <ProductDetailsPage /> },
-            (role === 'Phục vụ' && { path: 'new', element: <ProductCreatePage /> }),
+            staff && { path: 'new', element: <ProductCreatePage /> },
             { path: ':id/edit', element: <ProductEditPage /> },
-          ].filter(a => !!a),
-        }),
-        (role === 'Thu ngân' && {
+          ].filter((a) => !!a),
+        },
+        threeMainBossAndCashier && {
           path: 'invoice',
           children: [
             { element: <InvoiceListPage />, index: true },
-            { path: 'list', element: <InvoiceListPage /> },
+            threeMainBossAndCashier && { path: 'list', element: <InvoiceListPage /> },
             { path: ':id', element: <InvoiceDetailsPage /> },
             { path: ':id/edit', element: <InvoiceEditPage /> },
-            { path: 'new', element: <InvoiceCreatePage /> },
+            cashier && { path: 'new', element: <InvoiceCreatePage /> },
           ],
-        }),
+        },
         // {
         //   path: 'order',
         //   children: [
@@ -195,7 +194,7 @@ export const dashboardRoutes = (role, lgUp) => {
         // { path: 'kanban', element: <KanbanPage /> },
         // { path: 'permission', element: <PermissionDeniedPage /> },
         // { path: 'blank', element: <BlankPage /> },
-      ].filter(route => !!route),
+      ].filter((route) => !!route),
     },
-  ]
-}
+  ];
+};

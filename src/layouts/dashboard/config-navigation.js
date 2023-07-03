@@ -45,10 +45,31 @@ import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
-export function useNavData() {
-  // const { t } = useLocales();
+export const navbarRoles = (role) => ({
+  threeMainBoss:
+    role === 'Admin' || role === 'Tổng quản lý chi nhánh' || role === 'Tổng quản lý hệ thống',
+  staff: role === 'Phục vụ ca sáng' || role === 'Phục vụ ca tối',
+  cashier: role === 'Thu ngân ca sáng' || role === 'Thu ngân ca tối',
+  staffAndCashier:
+    role === 'Phục vụ ca sáng' ||
+    role === 'Phục vụ ca tối' ||
+    role === 'Thu ngân ca sáng' ||
+    role === 'Thu ngân ca tối',
+  threeMainBossAndCashier:
+    role === 'Admin' ||
+    role === 'Tổng quản lý chi nhánh' ||
+    role === 'Tổng quản lý hệ thống' ||
+    role === 'Thu ngân ca sáng' ||
+    role === 'Thu ngân ca tối',
+});
 
+export function useNavData() {
   const { user } = useAuthContext();
+
+  const { threeMainBoss, staff, cashier, staffAndCashier, threeMainBossAndCashier } = navbarRoles(
+    user?.role
+  );
+  // const { t } = useLocales();
 
   const data = useMemo(
     () => [
@@ -71,13 +92,28 @@ export function useNavData() {
       {
         // subheader: t('management'),
         items: [
-          (user?.role === "Admin" && ({ title: "Danh sách tài khoản", path: paths.dashboard.user.list, })),
-          (user?.role === "Admin" && ({ title: "Tạo tài khoản", path: paths.dashboard.user.new, })),
-          (user?.role === "Admin" && ({ title: "Danh sách voucher", path: paths.dashboard.product.root, })),
-          (user?.role === "Phục vụ" && ({ title: "Tạo voucher", path: paths.dashboard.product.new, })),
-          (user?.role === "Phục vụ" && ({ title: "Báo cáo cơ sở vật chất", path: paths.dashboard.product.report, })),
-          (user?.role === "Thu ngân" && ({ title: "Danh sách hóa đơn", path: paths.dashboard.invoice.root, })),
-          (user?.role === "Thu ngân" && ({ title: "Tạo hóa đơn", path: paths.dashboard.invoice.new, })),
+          threeMainBoss && {
+            title: 'Danh sách tài khoản',
+            path: paths.dashboard.user.list,
+          },
+          threeMainBoss && {
+            title: 'Tạo tài khoản',
+            path: paths.dashboard.user.new,
+          },
+          threeMainBoss && {
+            title: 'Danh sách voucher',
+            path: paths.dashboard.product.root,
+          },
+          staff && { title: 'Tạo voucher', path: paths.dashboard.product.new },
+          staffAndCashier && {
+            title: 'Báo cáo cơ sở vật chất',
+            path: paths.dashboard.product.report,
+          },
+          threeMainBossAndCashier && {
+            title: 'Danh sách hóa đơn',
+            path: paths.dashboard.invoice.root,
+          },
+          cashier && { title: 'Tạo hóa đơn', path: paths.dashboard.invoice.new },
 
           // USER
           // {
@@ -205,10 +241,10 @@ export function useNavData() {
           //   path: paths.dashboard.kanban,
           //   icon: ICONS.kanban,
           // },
-        ].filter(a => !!a),
+        ].filter((a) => !!a),
       },
     ],
-    [user]
+    [cashier, staff, staffAndCashier, threeMainBoss, threeMainBossAndCashier]
   );
 
   return data;

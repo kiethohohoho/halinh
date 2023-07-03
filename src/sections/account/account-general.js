@@ -88,7 +88,7 @@ export default function AccountGeneral() {
               <RHFTextField name="sdt" label="Số điện thoại" />
 
               <RHFAutocomplete
-                disabled={user?.role !== 'Admin' || user?.role !== 'Tổng quản lý chi nhánh'}
+                disabled={user?.role !== 'Admin' || user?.role !== 'Tổng quản lý hệ thống'}
                 name="role"
                 label="Chức danh"
                 options={[
@@ -105,7 +105,7 @@ export default function AccountGeneral() {
                 getOptionLabel={(option) => option}
               />
 
-              {(user?.role !== 'Admin' || user?.role !== 'Tổng quản lý chi nhánh') && (
+              {(user?.role !== 'Admin' || user?.role !== 'Tổng quản lý hệ thống') && (
                 <RHFAutocomplete
                   disabled
                   name="belong"
