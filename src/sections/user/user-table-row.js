@@ -28,7 +28,7 @@ export default function UserTableRow({
 }) {
   const { name, role, belong, isDeleted, sdt } = row;
 
-  const canEdit = compareRoleLevel(authUserRole, role);
+  const canEdit = compareRoleLevel(authUserRole, role); //
 
   const confirm = useBoolean();
 

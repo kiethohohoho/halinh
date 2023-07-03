@@ -7,8 +7,11 @@ function getRoleLevel(role) {
 export function compareRoleLevel(role1, role2) {
   const level1 = getRoleLevel(role1);
   const level2 = getRoleLevel(role2);
-  if (!level1 || !level2) {
+  if (!level1) {
     return false;
+  }
+  if (!level2) {
+    return true;
   }
   return level1 >= level2;
 }

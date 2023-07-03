@@ -118,12 +118,12 @@ export default function UserQuickEditForm({ currentUser, open, onClose, onQuickE
               getOptionLabel={(option) => option}
             />
 
-            <RHFAutocomplete
+            {/* <RHFAutocomplete
               name="shift"
               label="Ca làm việc"
               options={['Tối', 'Sáng']}
               getOptionLabel={(option) => option}
-            />
+            /> */}
 
             <RHFAutocomplete name="belong" label="Chi nhánh" options={['Linh Hà 1', 'Linh Hà 2']} />
           </Box>

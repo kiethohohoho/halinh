@@ -63,10 +63,14 @@ export default function UserListView() {
   const table = useTable();
 
   const {
-    user: { role: authUserRole },
+    user: { role: authUserRole, belong: authUserBelong },
   } = useAuthContext();
 
-  const { users, usersMutate } = useGetUsers({});
+  const boss_branch = { belong: authUserBelong };
+
+  const { users, usersMutate } = useGetUsers(
+    authUserRole === 'Tổng quản lý chi nhánh' ? boss_branch : {}
+  );
 
   const settings = useSettingsContext();
 
@@ -171,7 +175,17 @@ export default function UserListView() {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={['Admin', 'Thu ngân', 'Phục vụ']}
+            roleOptions={[
+              'Admin',
+              'Tổng quản lý hệ thống',
+              'Tổng quản lý chi nhánh',
+              'Quản lý ca sáng',
+              'Quản lý ca tối',
+              'Thu ngân ca sáng',
+              'Thu ngân ca tối',
+              'Phục vụ ca sáng',
+              'Phục vụ ca tối',
+            ]}
           />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>

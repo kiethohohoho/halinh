@@ -20,7 +20,7 @@ export function useGetInvoices({
     OrderBy: OrderBy || 'DateUsed',
     AES: AES || 'false',
     PageIndex: PageIndex || 0,
-    PageSize: PageSize || 10
+    PageSize: PageSize || 100
   };
 
   // Generate the URL with encoded parameters

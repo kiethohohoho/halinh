@@ -20,7 +20,7 @@ export function useGetUsers({
     OrderBy: OrderBy || 'Role',
     AES: AES || 'true',
     PageIndex: PageIndex || 0,
-    PageSize: PageSize || 10
+    PageSize: PageSize || 100
   };
 
   // Generate the URL with encoded parameters

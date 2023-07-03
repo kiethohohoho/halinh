@@ -39,11 +39,11 @@ export const BOSS_ROLES_LEVEL = [
     level: 3,
   },
   {
-    name: 'Quản lý hệ thống',
+    name: 'Tổng quản lý hệ thống',
     level: 2,
   },
   {
-    name: 'Quản lý chi nhánh',
+    name: 'Tổng quản lý chi nhánh',
     level: 1,
   },
 ];

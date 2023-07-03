@@ -16,6 +16,7 @@ import { useSnackbar } from 'src/components/snackbar';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { RouterLink } from 'src/routes/components';
 import { useResponsive } from 'src/hooks/use-responsive';
+import { navbarRoles } from 'src/layouts/dashboard/config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,7 @@ export default function AccountGeneral() {
   const lgUp = useResponsive('up', 'lg');
 
   const { user } = useAuthContext();
+  const { threeMainBoss } = navbarRoles(user?.role);
 
   const UpdateUserSchema = Yup.object().shape({
     name: Yup.string().required('Bắt buộc điền Họ tên'),
@@ -88,7 +90,7 @@ export default function AccountGeneral() {
               <RHFTextField name="sdt" label="Số điện thoại" />
 
               <RHFAutocomplete
-                disabled={user?.role !== 'Admin' || user?.role !== 'Tổng quản lý hệ thống'}
+                disabled={!threeMainBoss}
                 name="role"
                 label="Chức danh"
                 options={[
@@ -105,7 +107,7 @@ export default function AccountGeneral() {
                 getOptionLabel={(option) => option}
               />
 
-              {(user?.role !== 'Admin' || user?.role !== 'Tổng quản lý hệ thống') && (
+              {!threeMainBoss && (
                 <RHFAutocomplete
                   disabled
                   name="belong"

@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 // @mui
@@ -20,6 +20,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hook';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { useAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,10 @@ export default function UserNewEditForm({ currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
   const lgUp = useResponsive('up', 'lg');
   const router = useRouter();
+  const {
+    user: { role: authUserRole, belong: authUserBelong },
+  } = useAuthContext();
+  const [isDisabledBelong, setIsDisabledBelong] = useState(false);
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Bắt buộc điền Họ tên'),
@@ -38,17 +43,26 @@ export default function UserNewEditForm({ currentUser }) {
     password: Yup.string().required('Bắt buộc điền Mật khoản'),
   });
 
+  const convertBelong = (belong) => {
+    if (!belong) return '';
+    return belong === 'LH1' ? 'Linh Hà 1' : 'Linh Hà 2';
+  };
+
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       sdt: currentUser?.sdt || '',
       role: currentUser?.role || '',
       // shift: currentUser?.role || '',
-      belong: currentUser?.belong || '',
+      belong:
+        authUserRole === 'Tổng quản lý chi nhánh'
+          ? convertBelong(authUserBelong)
+          : convertBelong(currentUser?.belong) || '',
       account: currentUser?.account || '',
       password: currentUser?.password || '',
     }),
-    [currentUser]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentUser, authUserRole]
   );
 
   const methods = useForm({
@@ -57,10 +71,23 @@ export default function UserNewEditForm({ currentUser }) {
   });
 
   const {
+    watch,
     reset,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const watchRole = watch('role');
+
+  useEffect(() => {
+    if (watchRole === 'Admin' || watchRole === 'Tổng quản lý hệ thống') {
+      setIsDisabledBelong(true);
+      setValue('belong', '');
+    } else {
+      setIsDisabledBelong(false);
+    }
+  }, [setValue, watchRole]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -126,6 +153,7 @@ export default function UserNewEditForm({ currentUser }) {
               /> */}
 
               <RHFAutocomplete
+                disabled={authUserRole === 'Tổng quản lý chi nhánh' || isDisabledBelong}
                 name="belong"
                 label="Chi nhánh"
                 options={['Linh Hà 1', 'Linh Hà 2']}
